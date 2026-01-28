@@ -26,9 +26,9 @@ public class MainGenerator : IIncrementalGenerator
                })
                .WithTrackingName("EIVPack.EIVPackable.1_ForAttributeEIVPackableAttribute");
 
-        context.RegisterSourceOutput(typeDeclarations, static (context, source) =>
+        context.RegisterSourceOutput(typeDeclarations.Combine(context.CompilationProvider), static (context, source) =>
         {
-            
+            PackGenerator.Generate(source.Left, source.Right, context);
         });
     }
 }
