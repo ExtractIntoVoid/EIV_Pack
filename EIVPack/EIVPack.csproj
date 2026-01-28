@@ -5,10 +5,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<Title>Serialization for EIV</Title>
-		<Authors>Extract Into Void</Authors>
-		<Company>Extract Into Void</Company>
+		<Authors>ExtractIntoVoid;SlejmUr</Authors>
+		<Company>ExtractIntoVoid</Company>
 		<Description>Serialization Pack</Description>
-		<Copyright>Extract Into Void</Copyright>
+		<Copyright>ExtractIntoVoid</Copyright>
 		<PackageProjectUrl>https://github.com/ExtractIntoVoid/EIVPack</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
