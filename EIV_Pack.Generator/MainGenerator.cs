@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 
-namespace EIVPack.Generator;
+namespace EIV_Pack.Generator;
 
 [Generator(LanguageNames.CSharp)]
 public class MainGenerator : IIncrementalGenerator
@@ -14,11 +14,10 @@ public class MainGenerator : IIncrementalGenerator
                AttributeFullName,
                predicate: static (node, token) =>
                {
-                   // search [EIVPackable] class or struct or interface or record
-                   return (node is ClassDeclarationSyntax
+                   // search [EIVPackable] class or struct or record
+                   return node is ClassDeclarationSyntax
                                 or StructDeclarationSyntax
-                                or RecordDeclarationSyntax
-                                or InterfaceDeclarationSyntax);
+                                or RecordDeclarationSyntax;
                },
                transform: static (context, token) =>
                {

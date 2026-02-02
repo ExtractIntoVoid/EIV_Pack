@@ -1,4 +1,4 @@
-﻿namespace EIVPack.Formatters;
+﻿namespace EIV_Pack.Formatters;
 
 public sealed class KeyValuePairFormatter<TKey, TValue> : IFormatter<KeyValuePair<TKey?, TValue?>>
 {

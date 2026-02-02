@@ -1,10 +1,10 @@
-﻿using EIVPack.Formatters;
+﻿using EIV_Pack.Formatters;
 using System.Buffers;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace EIVPack;
+namespace EIV_Pack;
 
 public ref struct PackReader
 {

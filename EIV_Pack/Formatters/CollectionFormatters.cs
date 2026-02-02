@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
 
-namespace EIVPack.Formatters;
+namespace EIV_Pack.Formatters;
 
 public abstract class ICollectionFormatter<T, TCollection> : IFormatter<TCollection> where TCollection : ICollection?, new()
 {

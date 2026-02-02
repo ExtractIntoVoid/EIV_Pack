@@ -7,11 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <ProjectReference Include="..\EIV_Pack.Generator\EIV_Pack.Generator.csproj" >
+	  <ProjectReference Include="..\EIV_Pack.Generator\EIV_Pack.Generator.csproj">
 		  <OutputItemType>Analyzer</OutputItemType>
 		  <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
 	  </ProjectReference>
     <ProjectReference Include="..\EIV_Pack\EIV_Pack.csproj" />
   </ItemGroup>
-
+	<!-- Check Analyzer/Generator
+	<PropertyGroup>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+		<CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
+	</PropertyGroup>
+	-->
 </Project>

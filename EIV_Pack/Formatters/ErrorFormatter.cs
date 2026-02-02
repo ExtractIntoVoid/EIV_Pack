@@ -1,4 +1,4 @@
-﻿namespace EIVPack.Formatters;
+﻿namespace EIV_Pack.Formatters;
 
 public class ErrorFormatter<T> : IFormatter<T>
 {

@@ -1,6 +1,6 @@
 ﻿using System.Buffers;
 
-namespace EIVPack;
+namespace EIV_Pack;
 
 public static class Serializer
 {

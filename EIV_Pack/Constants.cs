@@ -1,6 +1,6 @@
 ﻿using Microsoft.IO;
 
-namespace EIVPack;
+namespace EIV_Pack;
 
 public static class Constants
 {

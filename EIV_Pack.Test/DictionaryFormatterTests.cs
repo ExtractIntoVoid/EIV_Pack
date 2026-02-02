@@ -1,7 +1,7 @@
 ﻿using System;
-using EIVPack.Formatters;
+using EIV_Pack.Formatters;
 
-namespace EIVPack.Test;
+namespace EIV_Pack.Test;
 
 public class DictionaryFormatterTests
 {

@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace EIVPack;
+namespace EIV_Pack;
 
 public ref partial struct PackWriter : IDisposable
 {

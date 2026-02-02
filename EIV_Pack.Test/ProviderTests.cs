@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EIVPack.Test;
+namespace EIV_Pack.Test;
 
 public class ProviderTests
 {

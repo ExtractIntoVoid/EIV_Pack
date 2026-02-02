@@ -1,6 +1,6 @@
-﻿using EIVPack.Formatters;
+﻿using EIV_Pack.Formatters;
 
-namespace EIVPack;
+namespace EIV_Pack;
 
 internal static class Cache<T>
 {

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace EIVPack;
+namespace EIV_Pack;
 
 public class PackException(string message) : Exception(message)
 {

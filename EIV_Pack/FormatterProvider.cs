@@ -1,8 +1,8 @@
-﻿using EIVPack.Formatters;
+﻿using EIV_Pack.Formatters;
 using System.Numerics;
 using System.Text;
 
-namespace EIVPack;
+namespace EIV_Pack;
 
 /// <summary>
 /// Provide access to cached <see cref="IFormatter{T}"/>.

@@ -1,9 +1,9 @@
-﻿using EIVPack.Formatters;
+﻿using EIV_Pack.Formatters;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace EIVPack.Test;
+namespace EIV_Pack.Test;
 
 public class CollectionFormattersTests
 {

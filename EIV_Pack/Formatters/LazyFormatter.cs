@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace EIVPack.Formatters;
+namespace EIV_Pack.Formatters;
 
 public sealed class LazyFormatter<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] T> : IFormatter<Lazy<T?>>
 {

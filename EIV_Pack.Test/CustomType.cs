@@ -1,9 +1,9 @@
-﻿using EIVPack.Formatters;
+﻿using EIV_Pack.Formatters;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EIVPack.Test;
+namespace EIV_Pack.Test;
 
 internal class CustomType : IPackable<CustomType>, IFormatter<CustomType>
 {

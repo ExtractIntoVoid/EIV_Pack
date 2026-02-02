@@ -1,6 +1,6 @@
 ﻿using System.Buffers;
 
-namespace EIVPack;
+namespace EIV_Pack;
 
 public ref partial struct PackWriter : IDisposable
 {

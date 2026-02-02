@@ -1,7 +1,7 @@
 ﻿using Microsoft.IO;
 using System.Text;
 
-namespace EIVPack;
+namespace EIV_Pack;
 
 public ref partial struct PackWriter(Encoding encoding) : IDisposable
 {

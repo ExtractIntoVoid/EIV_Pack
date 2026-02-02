@@ -1,4 +1,4 @@
-﻿namespace EIVPack.Formatters;
+﻿namespace EIV_Pack.Formatters;
 
 public sealed class ArrayFormatter<T> : IFormatter<T?[]>
 {

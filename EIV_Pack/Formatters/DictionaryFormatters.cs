@@ -1,4 +1,4 @@
-﻿namespace EIVPack.Formatters;
+﻿namespace EIV_Pack.Formatters;
 
 public abstract class IDictionaryFormatter<TKey, TValue, TDictionary> : IFormatter<TDictionary>
     where TDictionary : IDictionary<TKey, TValue?>?, new()

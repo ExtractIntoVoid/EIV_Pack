@@ -1,4 +1,4 @@
-﻿namespace EIVPack.Formatters;
+﻿namespace EIV_Pack.Formatters;
 
 public sealed class UnmanagedFormatter<T> : IFormatter<T> where T : unmanaged
 {

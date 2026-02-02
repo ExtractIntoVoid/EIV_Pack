@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace EIVPack.Test;
+namespace EIV_Pack.Test;
 
 public class UnmanagedTests
 {
