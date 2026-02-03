@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
 using System.Text;
 
 namespace EIV_Pack.Generator;
@@ -29,72 +28,11 @@ internal static class PackGenerator
         if (typeSymbol.DeclaredAccessibility == Accessibility.Private)
             return;
 
-        var fieldOrParam = typeSymbol.GetMembers().Where(static x => 
-        x.Kind is SymbolKind.Property or SymbolKind.Field && 
-        !x.Name.Contains("k__BackingField") &&
-        !x.IsStatic && !x.IsAbstract &&
-        x.Name != "EqualityContract"
-        );
-
-
-        var fieldOrParamList = fieldOrParam.ToList();
-
-        foreach (var prop in fieldOrParamList.Where(x => x.Kind is SymbolKind.Property).ToList())
-        {
-            IPropertySymbol propSymbol = (IPropertySymbol)prop;
-            if (propSymbol.IsReadOnly)
-            {
-                fieldOrParamList.Remove(prop);
-                continue;
-            }
-
-            var getMethod = propSymbol.GetMethod;
-            if (getMethod == null)
-            {
-                fieldOrParamList.Remove(prop);
-                continue;
-            }
-
-            if (getMethod.DeclaredAccessibility == Accessibility.Private)
-            {
-                fieldOrParamList.Remove(prop);
-                continue;
-            }
-
-
-            var setMethod = propSymbol.SetMethod;
-            if (setMethod == null)
-            {
-                fieldOrParamList.Remove(prop);
-                continue;
-            }
-
-            if (setMethod.IsInitOnly)
-            {
-                fieldOrParamList.Remove(prop);
-                continue;
-            }
-
-            if (setMethod.DeclaredAccessibility == Accessibility.Private)
-            {
-                fieldOrParamList.Remove(prop);
-                continue;
-            }
-        }
-
-        foreach (var field in fieldOrParamList.Where(x => x.Kind is SymbolKind.Field).ToList())
-        {
-            IFieldSymbol fieldSymbol = (IFieldSymbol)field;
-
-            if (fieldSymbol.IsReadOnly)
-            {
-                fieldOrParamList.Remove(field);
-            }
-        }
+        var fieldOrParamList = GetFieldOrParams(ref typeSymbol);
 
         if (fieldOrParamList.Count == 0)
         {
-            context.ReportDiagnostic(Diagnostic.Create(DiagnosticDescriptors.MustBePartial, syntax.Identifier.GetLocation(), typeSymbol.Name));
+            context.ReportDiagnostic(Diagnostic.Create(DiagnosticDescriptors.NoFieldOrProperties, syntax.Identifier.GetLocation(), typeSymbol.Name));
             return;
         }
 
@@ -121,9 +59,9 @@ internal static class PackGenerator
         INamespaceSymbol namespaceSymbol = typeSymbol.ContainingNamespace;
         while (namespaceSymbol != null)
         {
-            sb.AppendLine($"// ns: {namespaceSymbol} {namespaceSymbol.Name}");
             if (namespaceSymbol.Name.Contains("<global namespace>"))
                 break;
+
             names.Add(namespaceSymbol.Name);
             namespaceSymbol = namespaceSymbol.ContainingNamespace;
         }
@@ -145,14 +83,19 @@ internal static class PackGenerator
         sb.AppendLine();
         sb.AppendLine($"partial {classOrStructOrRecord} {typeSymbol.Name} : IPackable<{typeSymbol.Name}>, IFormatter<{typeSymbol.Name}>");
         sb.AppendLine("{");
-        sb.AppendLine($"\tstatic {typeSymbol.Name}()");
-        sb.AppendLine("\t{");
 
-        // Add custom formatter "subscribe here".
+        if (!typeSymbol.GetMembers().Any(x => x.IsStatic && x.Kind == SymbolKind.Method && x.Name == ".cctor"))
+        {
+            sb.AppendLine("""
 
-        sb.AppendLine($"\t\tFormatterProvider.Register<{typeSymbol.Name}>();");
+                static __REPLACE__()
+                {
+                    FormatterProvider.Register<__REPLACE__>();
+                }
 
-        sb.AppendLine("\t}");
+                """.Replace("__REPLACE__", typeSymbol.Name));
+        }
+
         sb.AppendLine("""
 
                 public static void RegisterFormatter()
@@ -349,5 +292,74 @@ internal static class PackGenerator
         }
 
         sb.AppendLine($"\t\tvalue.{symbol.Name} = reader.ReadValue<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>();");
+    }
+
+    static List<ISymbol> GetFieldOrParams(ref INamedTypeSymbol typeSymbol)
+    {
+        var fieldOrParam = typeSymbol.GetMembers().Where(static x =>
+        x.Kind is SymbolKind.Property or SymbolKind.Field &&
+        !x.Name.Contains("k__BackingField") &&
+        !x.IsStatic && !x.IsAbstract &&
+        x.Name != "EqualityContract"
+        );
+
+
+        var fieldOrParamList = fieldOrParam.ToList();
+
+        foreach (var prop in fieldOrParamList.Where(x => x.Kind is SymbolKind.Property).ToList())
+        {
+            IPropertySymbol propSymbol = (IPropertySymbol)prop;
+            if (propSymbol.IsReadOnly)
+            {
+                fieldOrParamList.Remove(prop);
+                continue;
+            }
+
+            var getMethod = propSymbol.GetMethod;
+            if (getMethod == null)
+            {
+                fieldOrParamList.Remove(prop);
+                continue;
+            }
+
+            if (getMethod.DeclaredAccessibility == Accessibility.Private)
+            {
+                fieldOrParamList.Remove(prop);
+                continue;
+            }
+
+
+            var setMethod = propSymbol.SetMethod;
+            if (setMethod == null)
+            {
+                fieldOrParamList.Remove(prop);
+                continue;
+            }
+
+            if (setMethod.IsInitOnly)
+            {
+                fieldOrParamList.Remove(prop);
+                continue;
+            }
+
+            if (setMethod.DeclaredAccessibility == Accessibility.Private)
+            {
+                fieldOrParamList.Remove(prop);
+                continue;
+            }
+        }
+
+        foreach (var field in fieldOrParamList.Where(x => x.Kind is SymbolKind.Field).ToList())
+        {
+            IFieldSymbol fieldSymbol = (IFieldSymbol)field;
+
+            if (fieldSymbol.IsReadOnly)
+            {
+                fieldOrParamList.Remove(field);
+            }
+        }
+
+
+        return fieldOrParamList;
     }
 }
