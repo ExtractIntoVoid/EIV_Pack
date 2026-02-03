@@ -13,10 +13,10 @@
 	  </ProjectReference>
     <ProjectReference Include="..\EIV_Pack\EIV_Pack.csproj" />
   </ItemGroup>
-	<!-- Check Analyzer/Generator
-	<PropertyGroup>
-		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-		<CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
-	</PropertyGroup>
-	-->
+	<!-- Check Analyzer/Generator-->
+  <PropertyGroup>
+	  <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+	  <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
+  </PropertyGroup>
+
 </Project>

@@ -18,10 +18,9 @@
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<!-- NuGet -->
 		<IsPackable>true</IsPackable>
-		<PackageTags>serializer</PackageTags>
 		<Description>Code generator for EIVPack.</Description>
-		<Version>2.1.1</Version>
-		<FileVersion>2.1.1</FileVersion>
+		<Version>2.1.2</Version>
+		<FileVersion>2.1.2</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

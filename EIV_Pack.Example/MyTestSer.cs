@@ -9,6 +9,8 @@ public partial class MyTestClass
     public int yeet;
     public int[]? yeetArray;
     public int Yeet { get; set; }
+
+    public List<int> test = [];
 }
 
 [EIV_Packable]

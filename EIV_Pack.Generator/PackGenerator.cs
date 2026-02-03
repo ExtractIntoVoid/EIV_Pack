@@ -88,10 +88,10 @@ internal static class PackGenerator
         {
             sb.AppendLine("""
 
-                static __REPLACE__()
-                {
-                    FormatterProvider.Register<__REPLACE__>();
-                }
+                    static __REPLACE__()
+                    {
+                        FormatterProvider.Register<__REPLACE__>();
+                    }
 
                 """.Replace("__REPLACE__", typeSymbol.Name));
         }
@@ -291,7 +291,7 @@ internal static class PackGenerator
             return;
         }
 
-        sb.AppendLine($"\t\tvalue.{symbol.Name} = reader.ReadValue<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>();");
+        sb.AppendLine($"\t\tvalue.{symbol.Name} = reader.ReadValue<{type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>(){(nullableAnnotation == NullableAnnotation.NotAnnotated ? "!" : string.Empty)};");
     }
 
     static List<ISymbol> GetFieldOrParams(ref INamedTypeSymbol typeSymbol)
