@@ -1,0 +1,29 @@
+name: Publish Packages
+
+on:
+  push:
+    tags:
+      - "release-*"
+  workflow_dispatch:
+    # allow manual trigger
+
+jobs:
+  publish_pack:
+    permissions:
+      contents: write
+      packages: write
+    uses: ExtractIntoVoid/workflows/.github/workflows/package.yml@main
+    with:
+      ProjName: EIV_Pack
+    secrets:
+      TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish_generator:
+    permissions:
+      contents: write
+      packages: write
+    uses: ExtractIntoVoid/workflows/.github/workflows/package.yml@main
+    with:
+      ProjName: EIV_Pack.Generator
+    secrets:
+      TOKEN: ${{ secrets.GITHUB_TOKEN }}

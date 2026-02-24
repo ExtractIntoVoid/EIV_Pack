@@ -1,0 +1,26 @@
+name: Build Solution
+
+on:
+  push:
+    tags-ignore:
+      - "release-*"
+    paths-ignore:
+      - '.github/*'
+      - '*.md'
+      - "*.yml"
+  pull_request:
+    paths-ignore:
+      - '.github/*'
+      - '*.md'
+      - "*.yml"
+  workflow_dispatch:
+    # allow manual trigger
+
+jobs:
+  build:
+    permissions:
+      contents: read
+      packages: read
+    uses: ExtractIntoVoid/workflows/.github/workflows/build_sln.yml@main
+    secrets:
+      TOKEN: ${{ secrets.GITHUB_TOKEN }}
