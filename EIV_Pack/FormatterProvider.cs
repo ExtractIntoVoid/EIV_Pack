@@ -1,6 +1,8 @@
 ﻿using EIV_Pack.Formatters;
 using System.Numerics;
+#if NET8_0_OR_GREATER
 using System.Text;
+#endif
 
 namespace EIV_Pack;
 
@@ -41,7 +43,9 @@ public static class FormatterProvider
     /// <typeparam name="T">Type to register.</typeparam>
     public static void Register<T>() where T : IFormatterRegister
     {
+#if NET8_0_OR_GREATER
         T.RegisterFormatter();
+#endif
     }
 
     /// <summary>
@@ -61,7 +65,7 @@ public static class FormatterProvider
         if (formatter == null)
             PackException.ThrowNotRegisteredInProvider(typeof(T));
 
-        return formatter;
+        return formatter!;
     }
 
     private static void RegisterFormatters()
@@ -74,8 +78,10 @@ public static class FormatterProvider
         RegisterToAll<UInt32>();
         RegisterToAll<Int64>();
         RegisterToAll<UInt64>();
+#if NET8_0_OR_GREATER
         RegisterToAll<UInt128>();
         RegisterToAll<Int128>();
+#endif
         RegisterToAll<Char>();
         RegisterToAll<Single>();
         RegisterToAll<Double>();
@@ -83,13 +89,17 @@ public static class FormatterProvider
         RegisterToAll<Boolean>();
         RegisterToAll<IntPtr>();
         RegisterToAll<UIntPtr>();
+#if NET8_0_OR_GREATER
         RegisterToAll<Rune>();
+#endif
         RegisterToAll<DateTime>();
         RegisterToAll<DateTimeOffset>();
         RegisterToAll<TimeSpan>();
         RegisterToAll<Guid>();
+#if NET8_0_OR_GREATER
         RegisterToAll<DateOnly>();
         RegisterToAll<TimeOnly>();
+#endif
         RegisterToAll<Complex>();
         RegisterToAll<Matrix3x2>();
         RegisterToAll<Matrix4x4>();

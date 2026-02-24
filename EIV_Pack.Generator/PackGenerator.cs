@@ -7,9 +7,10 @@ namespace EIV_Pack.Generator;
 
 internal static class PackGenerator
 {
-    internal static void Generate(TypeDeclarationSyntax syntax, Compilation compilation, SourceProductionContext context)
+    internal static void Generate(GeneratorClass generatorClass, SourceProductionContext context)
     {
-        var semanticModel = compilation.GetSemanticModel(syntax.SyntaxTree);
+        TypeDeclarationSyntax syntax = generatorClass.Syntax;
+        var semanticModel = generatorClass.Compilation.GetSemanticModel(syntax.SyntaxTree);
 
         var typeSymbol = semanticModel.GetDeclaredSymbol(syntax, context.CancellationToken);
         if (typeSymbol == null)
@@ -53,7 +54,13 @@ internal static class PackGenerator
         sb.AppendLine("// Generated with EIV_Pack.Generator.");
         sb.AppendLine("using EIV_Pack;");
         sb.AppendLine("using EIV_Pack.Formatters;");
-        sb.AppendLine("#nullable enable");
+        sb.AppendLine();
+
+        if (generatorClass.IsNet8OrGreater)
+        {
+            sb.AppendLine("#nullable enable");
+            sb.AppendLine();
+        }
 
         List<string> names = [];
         INamespaceSymbol namespaceSymbol = typeSymbol.ContainingNamespace;
@@ -77,8 +84,17 @@ internal static class PackGenerator
             namespaceStr = namespaceStr.Substring(1);
 
         if (!string.IsNullOrEmpty(namespaceStr))
-            sb.AppendLine($"namespace {namespaceStr};");
-
+        {
+            if (generatorClass.IsNet8OrGreater)
+            {
+                sb.AppendLine($"namespace {namespaceStr};");
+            }
+            else
+            {
+                sb.AppendLine($"namespace {namespaceStr}");
+                sb.AppendLine("{");
+            }
+        }
 
         sb.AppendLine();
         sb.AppendLine($"partial {classOrStructOrRecord} {typeSymbol.Name} : IPackable<{typeSymbol.Name}>, IFormatter<{typeSymbol.Name}>");
@@ -86,17 +102,21 @@ internal static class PackGenerator
 
         if (!typeSymbol.GetMembers().Any(x => x.IsStatic && x.Kind == SymbolKind.Method && x.Name == ".cctor"))
         {
-            sb.AppendLine($$"""
+            string register = generatorClass.IsNet8OrGreater ? $"FormatterProvider.Register<{typeSymbol.Name}>" : "RegisterFormatter";
+
+            sb.AppendLine(
+                $$"""
 
                     static {{typeSymbol.Name}}()
                     {
-                        FormatterProvider.Register<{{typeSymbol.Name}}>();
+                        {{register}}();
                     }
-
+                
                 """);
         }
 
-        sb.AppendLine($$"""
+        sb.AppendLine(
+            $$"""
 
                 public static void RegisterFormatter()
                 {
@@ -110,33 +130,43 @@ internal static class PackGenerator
                         FormatterProvider.Register(new ArrayFormatter<{{typeSymbol.Name}}>());
                     }
                 }
-
+            
             """);
 
-        GeneratePackable(ref syntax, ref typeSymbol, ref sb, ref fieldOrParamList);
+        GeneratePackable(ref syntax, ref typeSymbol, ref sb, ref fieldOrParamList, generatorClass.IsNet8OrGreater);
 
-        sb.AppendLine($$"""
 
-                public void Deserialize(ref PackReader reader, scoped ref {{typeSymbol.Name}}{{(typeSymbol.IsValueType ? string.Empty : "?")}} value)
+
+        sb.AppendLine(
+            $$"""
+
+                public void Deserialize(ref PackReader reader, scoped ref {{typeSymbol.Name}}{{(typeSymbol.IsValueType ? string.Empty : generatorClass.IsNet8OrGreater ? "?" : string.Empty)}} value)
                 {
                     DeserializePackable(ref reader, ref value);
                 }
 
-                public void Serialize(ref PackWriter writer, scoped ref readonly {{typeSymbol.Name}}{{(typeSymbol.IsValueType ? string.Empty : "?")}} value)
+                public void Serialize(ref PackWriter writer, scoped ref readonly {{typeSymbol.Name}}{{(typeSymbol.IsValueType ? string.Empty : generatorClass.IsNet8OrGreater ? "?" : string.Empty)}} value)
                 {
                     SerializePackable(ref writer, in value);
                 }
-
+            
             """);
 
         sb.AppendLine("}");
+
+        if (!string.IsNullOrEmpty(namespaceStr) && !generatorClass.IsNet8OrGreater)
+        {
+            sb.AppendLine();
+            sb.AppendLine("}");
+        }
+
         context.AddSource($"{fullType}.g.cs", sb.ToString());
     }
 
 
-    internal static void GeneratePackable(ref TypeDeclarationSyntax _, ref INamedTypeSymbol typeSymbol, ref StringBuilder sb, ref List<ISymbol> FieldAndParamList)
+    internal static void GeneratePackable(ref TypeDeclarationSyntax _, ref INamedTypeSymbol typeSymbol, ref StringBuilder sb, ref List<ISymbol> FieldAndParamList, bool isNet8OrGreater)
     {
-        var nullable = typeSymbol.IsValueType ? "" : "?";
+        var nullable = typeSymbol.IsValueType ? string.Empty : isNet8OrGreater ? "?" : string.Empty;
 
 
         sb.AppendLine($"\tconst int EIV_PACK_FieldAndParamCount = {FieldAndParamList.Count};");
@@ -165,7 +195,7 @@ internal static class PackGenerator
         }
 
         sb.AppendLine("\t}");
-
+        sb.AppendLine();
         sb.AppendLine($"\tpublic static void SerializePackable(ref PackWriter writer, scoped ref readonly {typeSymbol.Name}{nullable} value)");
         sb.AppendLine("\t{");
         if (!typeSymbol.IsValueType)

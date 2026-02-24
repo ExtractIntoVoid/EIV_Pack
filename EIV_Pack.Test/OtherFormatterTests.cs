@@ -10,7 +10,7 @@ public class OtherFormatterTests
         PackWriter writer = new();
         var formatter = new LazyFormatter<int>();
         Assert.NotNull(formatter);
-        Lazy<int> val = new(6);
+        Lazy<int> val = new(() => 6);
         Lazy<int>? vallNull = null;
         writer.WriteValueWithFormatter(formatter, val);
         writer.WriteValueWithFormatter(formatter, vallNull);

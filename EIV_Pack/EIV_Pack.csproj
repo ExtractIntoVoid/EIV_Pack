@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 		<PropertyGroup>	  
-		<TargetFramework>net10.0</TargetFramework>
+		<TargetFrameworks>net10.0;net8.0;netstandard2.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<Title>Serialization for EIV</Title>
@@ -12,8 +12,8 @@
 		<PackageProjectUrl>https://github.com/ExtractIntoVoid/EIV_Pack</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-		<Version>2.1</Version>
-		<FileVersion>2.1</FileVersion>
+		<Version>2.2</Version>
+		<FileVersion>2.2</FileVersion>
 		<LangVersion>latest</LangVersion>
 
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>

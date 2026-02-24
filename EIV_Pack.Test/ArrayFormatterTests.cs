@@ -6,6 +6,13 @@ namespace EIV_Pack.Test;
 
 public class ArrayFormatterTests
 {
+    private readonly ITestOutputHelper output;
+
+    public ArrayFormatterTests(ITestOutputHelper output)
+    {
+        this.output = output;
+    }
+
     [Fact]
     public void ArrayTest()
     {
@@ -16,6 +23,7 @@ public class ArrayFormatterTests
         writer.WriteValueWithFormatter(intArrayFormatter, ints);
         var bytes = writer.GetBytes();
         Assert.NotEmpty(bytes);
+        output.WriteLine(BitConverter.ToString(bytes));
         PackReader reader = new(bytes);
         Assert.Equal(ints, reader.ReadValueWithFormatter<int[]>(intArrayFormatter));
         Assert.Equal(0, reader.Remaining);

@@ -9,11 +9,16 @@ public ref partial struct PackWriter : IDisposable
     {
         int size = sizeof(T);
         Span<byte> span = recyclable.GetSpan(size);
+#if NET8_0_OR_GREATER
         MemoryMarshal.Write(span, value);
+#else
+        T val = value;
+        MemoryMarshal.Write(span, ref val);
+#endif
         recyclable.Advance(size);
     }
 
-    public readonly unsafe void WriteUnmanagedNullable<T>(scoped in T? value) where T : unmanaged
+    public readonly void WriteUnmanagedNullable<T>(scoped in T? value) where T : unmanaged
     {
         WriteUnmanaged(value.HasValue);
 

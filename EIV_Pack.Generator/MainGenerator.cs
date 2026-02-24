@@ -24,9 +24,27 @@ public class MainGenerator : IIncrementalGenerator
                })
                .WithTrackingName("EIV_Pack.EIV_Packable.1_ForAttributeEIV_PackableAttribute");
 
-        context.RegisterSourceOutput(typeDeclarations.Combine(context.CompilationProvider), static (context, source) =>
+        var options = context.ParseOptionsProvider.Select((option, token) =>
         {
-            PackGenerator.Generate(source.Left, source.Right, context);
+            return option.PreprocessorSymbolNames.Contains("NET8_0_OR_GREATER");
+        });
+
+        context.RegisterSourceOutput(typeDeclarations.Combine(context.CompilationProvider).Combine(options), static (context, source) =>
+        {
+            GeneratorClass generatorClass = new()
+            { 
+                Syntax = source.Left.Left,
+                Compilation = source.Left.Right,
+                IsNet8OrGreater = source.Right,
+            };
+            PackGenerator.Generate(generatorClass, context);
         });
     }
+}
+
+public class GeneratorClass
+{
+    public TypeDeclarationSyntax Syntax { get; set; } = default!;
+    public Compilation Compilation { get; set; } = default!;
+    public bool IsNet8OrGreater { get; set; } = default!;
 }

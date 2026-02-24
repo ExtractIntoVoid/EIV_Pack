@@ -26,10 +26,12 @@ public class UnmanagedTests
         writer.WriteUnmanaged(long.MaxValue);
         writer.WriteUnmanaged(ulong.MinValue);
         writer.WriteUnmanaged(ulong.MaxValue);
+#if NET8_0_OR_GREATER
         writer.WriteUnmanaged(Int128.MinValue);
         writer.WriteUnmanaged(Int128.MaxValue);
         writer.WriteUnmanaged(UInt128.MinValue);
         writer.WriteUnmanaged(UInt128.MaxValue);
+#endif
         writer.WriteUnmanaged(char.MinValue);
         writer.WriteUnmanaged(char.MaxValue);
         writer.WriteUnmanaged(float.MinValue);
@@ -38,20 +40,24 @@ public class UnmanagedTests
         writer.WriteUnmanaged(double.MaxValue);
         writer.WriteUnmanaged(decimal.MinValue);
         writer.WriteUnmanaged(decimal.MaxValue);
+#if NET8_0_OR_GREATER
         writer.WriteUnmanaged(IntPtr.MinValue);
         writer.WriteUnmanaged(IntPtr.MaxValue);
         writer.WriteUnmanaged(UIntPtr.MinValue);
         writer.WriteUnmanaged(UIntPtr.MaxValue);
+#endif
         writer.WriteUnmanaged(DateTime.MinValue);
         writer.WriteUnmanaged(DateTime.MaxValue);
         writer.WriteUnmanaged(DateTimeOffset.MinValue);
         writer.WriteUnmanaged(DateTimeOffset.MaxValue);
         writer.WriteUnmanaged(TimeSpan.MinValue);
         writer.WriteUnmanaged(TimeSpan.MaxValue);
+#if NET8_0_OR_GREATER
         writer.WriteUnmanaged(DateOnly.MinValue);
         writer.WriteUnmanaged(DateOnly.MaxValue);
         writer.WriteUnmanaged(TimeOnly.MinValue);
         writer.WriteUnmanaged(TimeOnly.MaxValue);
+#endif
         writer.WriteUnmanaged(Matrix3x2.Identity);
         writer.WriteUnmanaged(Matrix4x4.Identity);
         writer.WriteUnmanaged(Quaternion.Identity);
@@ -81,10 +87,12 @@ public class UnmanagedTests
         Assert.Equal(long.MaxValue, reader.ReadUnmanaged<long>());
         Assert.Equal(ulong.MinValue, reader.ReadUnmanaged<ulong>());
         Assert.Equal(ulong.MaxValue, reader.ReadUnmanaged<ulong>());
+#if NET8_0_OR_GREATER
         Assert.Equal(Int128.MinValue, reader.ReadUnmanaged<Int128>());
         Assert.Equal(Int128.MaxValue, reader.ReadUnmanaged<Int128>());
         Assert.Equal(UInt128.MinValue, reader.ReadUnmanaged<UInt128>());
         Assert.Equal(UInt128.MaxValue, reader.ReadUnmanaged<UInt128>());
+#endif
         Assert.Equal(char.MinValue, reader.ReadUnmanaged<char>());
         Assert.Equal(char.MaxValue, reader.ReadUnmanaged<char>());
         Assert.Equal(float.MinValue, reader.ReadUnmanaged<float>());
@@ -93,20 +101,24 @@ public class UnmanagedTests
         Assert.Equal(double.MaxValue, reader.ReadUnmanaged<double>());
         Assert.Equal(decimal.MinValue, reader.ReadUnmanaged<decimal>());
         Assert.Equal(decimal.MaxValue, reader.ReadUnmanaged<decimal>());
+#if NET8_0_OR_GREATER
         Assert.Equal(IntPtr.MinValue, reader.ReadUnmanaged<IntPtr>());
         Assert.Equal(IntPtr.MaxValue, reader.ReadUnmanaged<IntPtr>());
         Assert.Equal(UIntPtr.MinValue, reader.ReadUnmanaged<UIntPtr>());
         Assert.Equal(UIntPtr.MaxValue, reader.ReadUnmanaged<UIntPtr>());
+#endif
         Assert.Equal(DateTime.MinValue, reader.ReadUnmanaged<DateTime>());
         Assert.Equal(DateTime.MaxValue, reader.ReadUnmanaged<DateTime>());
         Assert.Equal(DateTimeOffset.MinValue, reader.ReadUnmanaged<DateTimeOffset>());
         Assert.Equal(DateTimeOffset.MaxValue, reader.ReadUnmanaged<DateTimeOffset>());
         Assert.Equal(TimeSpan.MinValue, reader.ReadUnmanaged<TimeSpan>());
         Assert.Equal(TimeSpan.MaxValue, reader.ReadUnmanaged<TimeSpan>());
+#if NET8_0_OR_GREATER
         Assert.Equal(DateOnly.MinValue, reader.ReadUnmanaged<DateOnly>());
         Assert.Equal(DateOnly.MaxValue, reader.ReadUnmanaged<DateOnly>());
         Assert.Equal(TimeOnly.MinValue, reader.ReadUnmanaged<TimeOnly>());
         Assert.Equal(TimeOnly.MaxValue, reader.ReadUnmanaged<TimeOnly>());
+#endif
         Assert.Equal(Matrix3x2.Identity, reader.ReadUnmanaged<Matrix3x2>());
         Assert.Equal(Matrix4x4.Identity, reader.ReadUnmanaged<Matrix4x4>());
         Assert.Equal(Quaternion.Identity, reader.ReadUnmanaged<Quaternion>());
@@ -140,10 +152,12 @@ public class UnmanagedTests
         writer.WriteUnmanagedNullable<long>(long.MaxValue);
         writer.WriteUnmanagedNullable<ulong>(ulong.MinValue);
         writer.WriteUnmanagedNullable<ulong>(ulong.MaxValue);
+#if NET8_0_OR_GREATER
         writer.WriteUnmanagedNullable<Int128>(Int128.MinValue);
         writer.WriteUnmanagedNullable<Int128>(Int128.MaxValue);
         writer.WriteUnmanagedNullable<UInt128>(UInt128.MinValue);
         writer.WriteUnmanagedNullable<UInt128>(UInt128.MaxValue);
+#endif
         writer.WriteUnmanagedNullable<char>(char.MinValue);
         writer.WriteUnmanagedNullable<char>(char.MaxValue);
         writer.WriteUnmanagedNullable<float>(float.MinValue);
@@ -152,20 +166,24 @@ public class UnmanagedTests
         writer.WriteUnmanagedNullable<double>(double.MaxValue);
         writer.WriteUnmanagedNullable<decimal>(decimal.MinValue);
         writer.WriteUnmanagedNullable<decimal>(decimal.MaxValue);
+#if NET8_0_OR_GREATER
         writer.WriteUnmanagedNullable<IntPtr>(IntPtr.MinValue);
         writer.WriteUnmanagedNullable<IntPtr>(IntPtr.MaxValue);
         writer.WriteUnmanagedNullable<UIntPtr>(UIntPtr.MinValue);
         writer.WriteUnmanagedNullable<UIntPtr>(UIntPtr.MaxValue);
+#endif
         writer.WriteUnmanagedNullable<DateTime>(DateTime.MinValue);
         writer.WriteUnmanagedNullable<DateTime>(DateTime.MaxValue);
         writer.WriteUnmanagedNullable<DateTimeOffset>(DateTimeOffset.MinValue);
         writer.WriteUnmanagedNullable<DateTimeOffset>(DateTimeOffset.MaxValue);
         writer.WriteUnmanagedNullable<TimeSpan>(TimeSpan.MinValue);
         writer.WriteUnmanagedNullable<TimeSpan>(TimeSpan.MaxValue);
+#if NET8_0_OR_GREATER
         writer.WriteUnmanagedNullable<DateOnly>(DateOnly.MinValue);
         writer.WriteUnmanagedNullable<DateOnly>(DateOnly.MaxValue);
         writer.WriteUnmanagedNullable<TimeOnly>(TimeOnly.MinValue);
         writer.WriteUnmanagedNullable<TimeOnly>(TimeOnly.MaxValue);
+#endif
         writer.WriteUnmanagedNullable<Matrix3x2>(Matrix3x2.Identity);
         writer.WriteUnmanagedNullable<Matrix4x4>(Matrix4x4.Identity);
         writer.WriteUnmanagedNullable<Quaternion>(Quaternion.Identity);
@@ -195,10 +213,12 @@ public class UnmanagedTests
         Assert.Equal(long.MaxValue, reader.ReadUnmanagedNullable<long>());
         Assert.Equal(ulong.MinValue, reader.ReadUnmanagedNullable<ulong>());
         Assert.Equal(ulong.MaxValue, reader.ReadUnmanagedNullable<ulong>());
+#if NET8_0_OR_GREATER
         Assert.Equal(Int128.MinValue, reader.ReadUnmanagedNullable<Int128>());
         Assert.Equal(Int128.MaxValue, reader.ReadUnmanagedNullable<Int128>());
         Assert.Equal(UInt128.MinValue, reader.ReadUnmanagedNullable<UInt128>());
         Assert.Equal(UInt128.MaxValue, reader.ReadUnmanagedNullable<UInt128>());
+#endif
         Assert.Equal(char.MinValue, reader.ReadUnmanagedNullable<char>());
         Assert.Equal(char.MaxValue, reader.ReadUnmanagedNullable<char>());
         Assert.Equal(float.MinValue, reader.ReadUnmanagedNullable<float>());
@@ -207,20 +227,24 @@ public class UnmanagedTests
         Assert.Equal(double.MaxValue, reader.ReadUnmanagedNullable<double>());
         Assert.Equal(decimal.MinValue, reader.ReadUnmanagedNullable<decimal>());
         Assert.Equal(decimal.MaxValue, reader.ReadUnmanagedNullable<decimal>());
+#if NET8_0_OR_GREATER
         Assert.Equal(IntPtr.MinValue, reader.ReadUnmanagedNullable<IntPtr>());
         Assert.Equal(IntPtr.MaxValue, reader.ReadUnmanagedNullable<IntPtr>());
         Assert.Equal(UIntPtr.MinValue, reader.ReadUnmanagedNullable<UIntPtr>());
         Assert.Equal(UIntPtr.MaxValue, reader.ReadUnmanagedNullable<UIntPtr>());
+#endif
         Assert.Equal(DateTime.MinValue, reader.ReadUnmanagedNullable<DateTime>());
         Assert.Equal(DateTime.MaxValue, reader.ReadUnmanagedNullable<DateTime>());
         Assert.Equal(DateTimeOffset.MinValue, reader.ReadUnmanagedNullable<DateTimeOffset>());
         Assert.Equal(DateTimeOffset.MaxValue, reader.ReadUnmanagedNullable<DateTimeOffset>());
         Assert.Equal(TimeSpan.MinValue, reader.ReadUnmanagedNullable<TimeSpan>());
         Assert.Equal(TimeSpan.MaxValue, reader.ReadUnmanagedNullable<TimeSpan>());
+#if NET8_0_OR_GREATER
         Assert.Equal(DateOnly.MinValue, reader.ReadUnmanagedNullable<DateOnly>());
         Assert.Equal(DateOnly.MaxValue, reader.ReadUnmanagedNullable<DateOnly>());
         Assert.Equal(TimeOnly.MinValue, reader.ReadUnmanagedNullable<TimeOnly>());
         Assert.Equal(TimeOnly.MaxValue, reader.ReadUnmanagedNullable<TimeOnly>());
+#endif
         Assert.Equal(Matrix3x2.Identity, reader.ReadUnmanagedNullable<Matrix3x2>());
         Assert.Equal(Matrix4x4.Identity, reader.ReadUnmanagedNullable<Matrix4x4>());
         Assert.Equal(Quaternion.Identity, reader.ReadUnmanagedNullable<Quaternion>());

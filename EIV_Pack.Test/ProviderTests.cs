@@ -13,7 +13,7 @@ public class ProviderTests
     {
         Assert.Throws<PackException>(() => FormatterProvider.GetFormatter<Test>());
 
-        FormatterProvider.Register<Test>(null);
+        FormatterProvider.Register<Test>(null!);
 
         Assert.Throws<PackException>(() => FormatterProvider.GetFormatter<Test>());
     }

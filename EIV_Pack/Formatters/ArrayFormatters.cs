@@ -23,7 +23,11 @@ public sealed class ArraySegmentFormatter<T> : IFormatter<ArraySegment<T?>>
     public void Deserialize(ref PackReader reader, scoped ref ArraySegment<T?> value)
     {
         T?[] array = reader.ReadArray<T>()!;
+#if NET8_0_OR_GREATER
         value = (ArraySegment<T?>)array;
+#else
+        value = new ArraySegment<T?>(array);
+#endif
     }
 }
 

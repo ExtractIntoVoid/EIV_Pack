@@ -45,7 +45,14 @@ public abstract class IDictionaryFormatter<TKey, TValue, TDictionary> : IFormatt
         var valueformatter = FormatterProvider.GetFormatter<TValue?>();
         foreach (var item in dictionary)
         {
+
+#if NET8_0_OR_GREATER
             item.Deconstruct(out var key, out var value);
+#else
+            var key = item.Key;
+            var value = item.Value;
+#endif
+
             keyformatter.Serialize(ref writer, ref key);
             valueformatter.Serialize(ref writer, ref value);
         }

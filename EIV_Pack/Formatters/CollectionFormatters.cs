@@ -119,7 +119,11 @@ public class HashSetFormatter<T>(IEqualityComparer<T?>? equalityComparer) : ICol
 
     public override HashSet<T?> CreateCollection(int length)
     {
+#if NET8_0_OR_GREATER
         return new(length, equalityComparer);
+#else
+        return new(equalityComparer);
+#endif
     }
 }
 
@@ -148,7 +152,9 @@ public class QueueFormatter<T> : ICollectionFormatter<T?, Queue<T?>>
     public override void Clear(scoped ref Queue<T?> collection, int length)
     {
         collection.Clear();
+#if NET8_0_OR_GREATER
         collection.EnsureCapacity(length);
+#endif
     }
 
     public override void Add(scoped ref Queue<T?> collection, T? value)
@@ -177,7 +183,9 @@ public class StackFormatter<T> : ICollectionFormatter<T?, Stack<T?>>
     public override void Clear(scoped ref Stack<T?> collection, int length)
     {
         collection.Clear();
+#if NET8_0_OR_GREATER
         collection.EnsureCapacity(length);
+#endif
     }
 
     public override T? GetValue(scoped ref readonly Stack<T?> collection, int index)

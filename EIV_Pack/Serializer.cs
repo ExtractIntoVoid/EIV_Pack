@@ -25,7 +25,13 @@ public static class Serializer
             return [];
 
         if (value.Length == 0)
+        {
+#if NET8_0_OR_GREATER
             return Constants.EmptyCollection.ToArray();
+#else
+            return new ArraySegment<byte>(Constants.EmptyCollection.ToArray());
+#endif
+        }
 
         using PackWriter writer = new();
         writer.WriteArray(value);
@@ -78,7 +84,7 @@ public static class Serializer
         if (bytes.Length == 0)
             return null;
 
-        if (Constants.EmptyCollection.SequenceEqual(bytes.FirstSpan))
+        if (Constants.EmptyCollection.SequenceEqual(bytes.First.Span))
             return [];
 
         PackReader reader = new(bytes);

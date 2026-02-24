@@ -18,7 +18,7 @@ public ref struct PackReader
     public PackReader(in ReadOnlySequence<byte> sequence)
     {
         bufferSource = sequence;
-        currentBuffer = sequence.FirstSpan;
+        currentBuffer = sequence.First.Span;
         Length = sequence.Length;
         TextEncoding = Encoding.UTF8;
     }
@@ -41,7 +41,7 @@ public ref struct PackReader
             throw new InvalidOperationException("Remaining bytes cannot read this type!");
         }
 
-        currentBuffer = bufferSource.Slice(Consumed + count, Remaining - count).FirstSpan;
+        currentBuffer = bufferSource.Slice(Consumed + count, Remaining - count).First.Span;
         Consumed += count;
     }
 
@@ -55,7 +55,12 @@ public ref struct PackReader
             throw new InvalidOperationException("Remaining bytes cannot read this type!");
         }
 
+#if NET8_0_OR_GREATER
         T value = MemoryMarshal.Read<T>(currentBuffer[..size]);
+#else
+        T value = MemoryMarshal.Read<T>(currentBuffer.Slice(0, size));
+#endif
+
         Advance(size);
         return value;
     }
@@ -82,7 +87,12 @@ public ref struct PackReader
             return false;
         }
 
+#if NET8_0_OR_GREATER
         var buffer = currentBuffer[..size];
+#else
+        var buffer = currentBuffer.Slice(0, size);
+#endif
+
         value = MemoryMarshal.Read<T>(buffer);
         return true;
     }
@@ -134,7 +144,12 @@ public ref struct PackReader
         if (len == 0)
             return string.Empty;
 
+#if NET8_0_OR_GREATER
         string str = TextEncoding.GetString(currentBuffer[..len]);
+#else
+        string str = TextEncoding.GetString(currentBuffer.Slice(0, len).ToArray());
+#endif
+
         Advance(len);
         return str;
     }
@@ -143,7 +158,12 @@ public ref struct PackReader
     public void ReadPackable<T>(scoped ref T? value)
         where T : IPackable<T>
     {
+#if NET8_0_OR_GREATER
         T.DeserializePackable(ref this, ref value);
+#else
+        ReadValue(ref value);
+#endif
+
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -151,7 +171,11 @@ public ref struct PackReader
         where T : IPackable<T>
     {
         T? value = default;
+#if NET8_0_OR_GREATER
         T.DeserializePackable(ref this, ref value);
+#else
+        ReadValue(ref value);
+#endif
         return value;
     }
 
@@ -211,7 +235,7 @@ public ref struct PackReader
             value = new T[length];
         }
 
-        var formatter = FormatterProvider.GetFormatter<T>();
+        var formatter = FormatterProvider.GetFormatter<T>(); 
         for (int i = 0; i < length; i++)
         {
             formatter.Deserialize(ref this, ref value[i]);
