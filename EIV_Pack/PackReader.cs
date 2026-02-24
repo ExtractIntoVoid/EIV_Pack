@@ -87,10 +87,11 @@ public ref struct PackReader
             return false;
         }
 
+        ReadOnlySpan<byte> buffer = currentBuffer
 #if NET8_0_OR_GREATER
-        var buffer = currentBuffer[..size];
+        [..size];
 #else
-        var buffer = currentBuffer.Slice(0, size);
+        .Slice(0, size);
 #endif
 
         value = MemoryMarshal.Read<T>(buffer);
@@ -235,7 +236,7 @@ public ref struct PackReader
             value = new T[length];
         }
 
-        var formatter = FormatterProvider.GetFormatter<T>(); 
+        IFormatter<T> formatter = FormatterProvider.GetFormatter<T>();
         for (int i = 0; i < length; i++)
         {
             formatter.Deserialize(ref this, ref value[i]);
@@ -256,7 +257,7 @@ public ref struct PackReader
             value = new T[length];
         }
 
-        var formatter = FormatterProvider.GetFormatter<T>();
+        IFormatter<T> formatter = FormatterProvider.GetFormatter<T>();
         for (int i = 0; i < length; i++)
         {
             formatter.Deserialize(ref this, ref value[i]);

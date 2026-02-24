@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using EIV_Pack.Formatters;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace EIV_Pack;
@@ -51,7 +52,7 @@ public ref partial struct PackWriter : IDisposable
         }
 
         WriteHeader(value.Length);
-        var data = TextEncoding.GetBytes(value);
+        byte[] data = TextEncoding.GetBytes(value);
         recyclable.Write(data);
     }
 
@@ -64,7 +65,7 @@ public ref partial struct PackWriter : IDisposable
         }
 
 
-        var formatter = FormatterProvider.GetFormatter<T>();
+        IFormatter<T> formatter = FormatterProvider.GetFormatter<T>();
 
         WriteHeader(array.Length);
         for (int i = 0; i < array.Length; i++)
@@ -75,7 +76,7 @@ public ref partial struct PackWriter : IDisposable
 
     public void WriteSpan<T>(scoped Span<T?> value, bool useHeader = true)
     {
-        var formatter = FormatterProvider.GetFormatter<T>();
+        IFormatter<T> formatter = FormatterProvider.GetFormatter<T>();
 
         if (useHeader)
             WriteHeader(value.Length);
@@ -88,7 +89,7 @@ public ref partial struct PackWriter : IDisposable
 
     public void WriteSpan<T>(scoped ReadOnlySpan<T?> value, bool useHeader = true)
     {
-        var formatter = FormatterProvider.GetFormatter<T>();
+        IFormatter<T> formatter = FormatterProvider.GetFormatter<T>();
 
         if (useHeader)
             WriteHeader(value.Length);

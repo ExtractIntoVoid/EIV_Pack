@@ -26,7 +26,7 @@ public abstract class ICollectionFormatter<T, TCollection> : IFormatter<TCollect
         else
             Clear(ref value, len);
 
-        var formatter = FormatterProvider.GetFormatter<T?>();
+        IFormatter<T?> formatter = FormatterProvider.GetFormatter<T?>();
         for (int i = 0; i < len; i++)
         {
             T? val = default;
@@ -44,7 +44,7 @@ public abstract class ICollectionFormatter<T, TCollection> : IFormatter<TCollect
         }
 
         writer.WriteHeader(collection.Count);
-        var formatter = FormatterProvider.GetFormatter<T?>();
+        IFormatter<T?> formatter = FormatterProvider.GetFormatter<T?>();
         for (int i = 0; i < collection.Count; i++)
         {
             T? val = GetValue(in collection, i);
@@ -73,7 +73,7 @@ public abstract class ICollectionTFormatter<T, TCollection> : IFormatter<TCollec
         else
             value.Clear();
 
-        var formatter = FormatterProvider.GetFormatter<T?>();
+        IFormatter<T?> formatter = FormatterProvider.GetFormatter<T?>();
         for (int i = 0; i < len; i++)
         {
             T? val = default;
@@ -91,7 +91,7 @@ public abstract class ICollectionTFormatter<T, TCollection> : IFormatter<TCollec
         }
 
         writer.WriteHeader(value.Count);
-        var formatter = FormatterProvider.GetFormatter<T?>();
+        IFormatter<T?> formatter = FormatterProvider.GetFormatter<T?>();
         foreach (var item in value)
         {
             var val = item;

@@ -16,7 +16,7 @@ public ref partial struct PackWriter : IDisposable
 #if NET8_0_OR_GREATER
         T.SerializePackable(ref this, ref Unsafe.AsRef(in value));
 #else
-        var formatter = FormatterProvider.GetFormatter<T>();
+        IFormatter<T> formatter = FormatterProvider.GetFormatter<T>();
         formatter.Serialize(ref this, ref Unsafe.AsRef(in value));
 #endif
 
@@ -30,7 +30,7 @@ public ref partial struct PackWriter : IDisposable
         if (depth == DepthLimit)
             PackException.ThrowReachedDepthLimit(typeof(T));
 
-        var formatter = FormatterProvider.GetFormatter<T>();
+        IFormatter<T> formatter = FormatterProvider.GetFormatter<T>();
         formatter.Serialize(ref this, ref Unsafe.AsRef(in value));
         depth--;
     }
