@@ -16,6 +16,7 @@
 		<PackageProjectUrl>https://github.com/ExtractIntoVoid/EIV_Pack</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<!-- NuGet -->
 		<IsPackable>true</IsPackable>
 		<Description>Code generator for EIVPack.</Description>
