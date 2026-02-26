@@ -7,11 +7,18 @@ public interface IFormatterRegister
 #endif
 }
 
-public interface IFormatter<T>
+public interface IFormatter
 {
-    abstract void Serialize(ref PackWriter writer, scoped ref readonly T? value);
+    void Serialize(ref PackWriter writer, scoped ref readonly object? value);
 
-    abstract void Deserialize(ref PackReader reader, scoped ref T? value);
+    void Deserialize(ref PackReader reader, scoped ref object? value);
+}
+
+public interface IFormatter<T> : IFormatter
+{
+    void Serialize(ref PackWriter writer, scoped ref readonly T? value);
+
+    void Deserialize(ref PackReader reader, scoped ref T? value);
 }
 
 public interface IPackable<T> : IFormatterRegister
@@ -22,3 +29,4 @@ public interface IPackable<T> : IFormatterRegister
     static abstract void DeserializePackable(ref PackReader reader, scoped ref T? value);
 #endif
 }
+

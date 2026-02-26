@@ -45,6 +45,16 @@ public ref struct PackReader
         Consumed += count;
     }
 
+    public void SetConsumed(int consumed)
+    {
+        if (consumed > Length)
+        {
+            return;
+        }
+
+        Consumed = consumed;
+        currentBuffer = bufferSource.Slice(Consumed, Remaining).First.Span;
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T ReadUnmanaged<T>() where T : unmanaged
@@ -188,6 +198,11 @@ public ref struct PackReader
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void ReadValue<T>(scoped ref T? value, IFormatter<T> formatter)
+    {
+        formatter.Deserialize(ref this, ref value);
+    }
+
+    public void ReadValue(scoped ref object? value, IFormatter formatter)
     {
         formatter.Deserialize(ref this, ref value);
     }

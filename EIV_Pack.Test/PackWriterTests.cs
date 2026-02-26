@@ -21,7 +21,6 @@ public class PackWriterTests
         writer.WritePackable(tt);
         writer.WritePackable(tt);
         writer.WriteString(null);
-
         Assert.NotEqual(0, writer.GetAsSegment().Count);
         Assert.NotEqual(0, writer.GetReadOnlySequence().Length);
 
@@ -31,7 +30,12 @@ public class PackWriterTests
         Assert.Equal(-1, len);
         Assert.True(reader.PeekIsNullOrEmpty());
         reader.ReadHeader();
+
+        var consumed = reader.Consumed;
         reader.ReadString();
+        reader.SetConsumed(consumed);
+        reader.ReadString();
+
         reader.ReadPackable<CustomType>();
         reader.ReadPackable(ref tt!);
         Assert.Throws<InvalidOperationException>(() =>

@@ -1,13 +1,13 @@
 ﻿namespace EIV_Pack.Formatters;
 
-public abstract class IDictionaryFormatter<TKey, TValue, TDictionary> : IFormatter<TDictionary>
+public abstract class IDictionaryFormatter<TKey, TValue, TDictionary> : BaseFormatter<TDictionary>
     where TDictionary : IDictionary<TKey, TValue?>?, new()
     where TKey : notnull
 {
 
     public abstract TDictionary CreateDictionary(int length);
 
-    public void Deserialize(ref PackReader reader, scoped ref TDictionary? value)
+    public override void Deserialize(ref PackReader reader, scoped ref TDictionary? value)
     {
         if (!reader.TryReadHeader(out int len) || len == Constants.NullHeader)
         {
@@ -32,7 +32,7 @@ public abstract class IDictionaryFormatter<TKey, TValue, TDictionary> : IFormatt
         }
     }
 
-    public void Serialize(ref PackWriter writer, scoped ref readonly TDictionary? dictionary)
+    public override void Serialize(ref PackWriter writer, scoped ref readonly TDictionary? dictionary)
     {
         if (dictionary == null)
         {

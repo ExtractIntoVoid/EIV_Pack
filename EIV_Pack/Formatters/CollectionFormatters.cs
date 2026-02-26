@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace EIV_Pack.Formatters;
 
-public abstract class ICollectionFormatter<T, TCollection> : IFormatter<TCollection> where TCollection : ICollection?, new()
+public abstract class ICollectionFormatter<T, TCollection> : BaseFormatter<TCollection> where TCollection : ICollection?, new()
 {
     public abstract TCollection CreateCollection(int length);
 
@@ -13,7 +13,7 @@ public abstract class ICollectionFormatter<T, TCollection> : IFormatter<TCollect
 
     public abstract T? GetValue(scoped ref readonly TCollection collection, int index);
 
-    public void Deserialize(ref PackReader reader, scoped ref TCollection? value)
+    public override void Deserialize(ref PackReader reader, scoped ref TCollection? value)
     {
         if (!reader.TryReadHeader(out int len) || len == Constants.NullHeader)
         {
@@ -35,7 +35,7 @@ public abstract class ICollectionFormatter<T, TCollection> : IFormatter<TCollect
         }
     }
 
-    public void Serialize(ref PackWriter writer, scoped ref readonly TCollection? collection)
+    public override void Serialize(ref PackWriter writer, scoped ref readonly TCollection? collection)
     {
         if (collection == null)
         {
@@ -53,14 +53,14 @@ public abstract class ICollectionFormatter<T, TCollection> : IFormatter<TCollect
     }
 }
 
-public abstract class ICollectionTFormatter<T, TCollection> : IFormatter<TCollection> where TCollection : ICollection<T?>?, new()
+public abstract class ICollectionTFormatter<T, TCollection> : BaseFormatter<TCollection> where TCollection : ICollection<T?>?, new()
 {
     public virtual TCollection CreateCollection(int length)
     {
         return new();
     }
 
-    public void Deserialize(ref PackReader reader, scoped ref TCollection? value)
+    public override void Deserialize(ref PackReader reader, scoped ref TCollection? value)
     {
         if (!reader.TryReadHeader(out int len) || len == Constants.NullHeader)
         {
@@ -82,7 +82,7 @@ public abstract class ICollectionTFormatter<T, TCollection> : IFormatter<TCollec
         }
     }
 
-    public void Serialize(ref PackWriter writer, scoped ref readonly TCollection? value)
+    public override void Serialize(ref PackWriter writer, scoped ref readonly TCollection? value)
     {
         if (value == null)
         {

@@ -8,9 +8,9 @@ public sealed class LazyFormatter<
 #if NET8_0_OR_GREATER
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
 #endif
-    T> : IFormatter<Lazy<T?>>
+    T> : BaseFormatter<Lazy<T?>>
 {
-    public void Deserialize(ref PackReader reader, scoped ref Lazy<T?>? value)
+    public override void Deserialize(ref PackReader reader, scoped ref Lazy<T?>? value)
     {
         if (!reader.TryReadSmallHeader(out byte count) || count == Constants.SmallNullHeader || count != 1)
         {
@@ -22,7 +22,7 @@ public sealed class LazyFormatter<
         value = new Lazy<T?>(() => v);
     }
 
-    public void Serialize(ref PackWriter writer, scoped ref readonly Lazy<T?>? value)
+    public override void Serialize(ref PackWriter writer, scoped ref readonly Lazy<T?>? value)
     {
         if (value == null)
         {

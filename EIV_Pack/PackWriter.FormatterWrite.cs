@@ -44,4 +44,11 @@ public ref partial struct PackWriter : IDisposable
         depth--;
     }
 
+
+    public void WriteValueWithFormatter(IFormatter formatter, scoped in object? value)
+    {
+        depth++;
+        formatter.Serialize(ref this, ref Unsafe.AsRef(in value));
+        depth--;
+    }
 }

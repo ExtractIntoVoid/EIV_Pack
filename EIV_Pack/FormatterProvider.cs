@@ -1,4 +1,5 @@
 ﻿using EIV_Pack.Formatters;
+using System.Collections.Concurrent;
 using System.Numerics;
 #if NET8_0_OR_GREATER
 using System.Text;
@@ -11,6 +12,8 @@ namespace EIV_Pack;
 /// </summary>
 public static class FormatterProvider
 {
+    static readonly ConcurrentDictionary<Type, IFormatter> formatters = new(Environment.ProcessorCount, 150);
+
     static FormatterProvider()
     {
         RegisterFormatters();
@@ -35,18 +38,19 @@ public static class FormatterProvider
     {
         Cache<T>.IsRegistered = true;
         Cache<T>.Formatter = formatter;
+        formatters[typeof(T)] = formatter;
     }
 
+#if NET8_0_OR_GREATER
     /// <summary>
     /// Registers a <typeparamref name="T"/> into type cache.
     /// </summary>
     /// <typeparam name="T">Type to register.</typeparam>
     public static void Register<T>() where T : IFormatterRegister
     {
-#if NET8_0_OR_GREATER
         T.RegisterFormatter();
-#endif
     }
+#endif
 
     /// <summary>
     /// Gets the <see cref="IFormatter{T}"/> from the cache.
@@ -66,6 +70,16 @@ public static class FormatterProvider
             PackException.ThrowNotRegisteredInProvider(typeof(T));
 
         return formatter!;
+    }
+
+    public static IFormatter GetFormatter(Type type)
+    {
+        if (!formatters.TryGetValue(type, out var formatter))
+        {
+            PackException.ThrowNotRegisteredInProvider(type);
+        }
+
+        return formatter;
     }
 
     private static void RegisterFormatters()

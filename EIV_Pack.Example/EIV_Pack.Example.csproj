@@ -23,4 +23,13 @@
 		<None Include="Generated/**" />
 	</ItemGroup>
 	-->
+
+	<PropertyGroup Condition=" $(TargetFramework) != 'net472' ">
+		<!-- To be native AOT -->
+		<IsAotCompatible>True</IsAotCompatible>
+		<PublishAot>true</PublishAot>
+		<DebuggerSupport>False</DebuggerSupport>
+		<PublishTrimmed>true</PublishTrimmed>
+		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+	</PropertyGroup>
 </Project>

@@ -1,11 +1,8 @@
 ﻿using EIV_Pack.Formatters;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EIV_Pack.Test;
 
-internal class CustomType : IPackable<CustomType>, IFormatter<CustomType>
+internal class CustomType : BaseFormatter<CustomType>, IPackable<CustomType>
 {
     public string? Value;
 
@@ -48,12 +45,12 @@ internal class CustomType : IPackable<CustomType>, IFormatter<CustomType>
         writer.WriteString(value.Value);
     }
 
-    public void Deserialize(ref PackReader reader, scoped ref CustomType? value)
+    public override void Deserialize(ref PackReader reader, scoped ref CustomType? value)
     {
         DeserializePackable(ref reader, ref value);
     }
 
-    public void Serialize(ref PackWriter writer, scoped ref readonly CustomType? value)
+    public override void Serialize(ref PackWriter writer, scoped ref readonly CustomType? value)
     {
         SerializePackable(ref writer, in value);
     }

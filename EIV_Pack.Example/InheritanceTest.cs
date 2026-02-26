@@ -42,9 +42,9 @@ public partial class MyCor
 [EIV_Packable]
 public partial class InitTest
 {
-    public int test2 { get; init; }
+    public int Test2 { get; init; }
 
-    public int test { get; set; }
+    public int Test { get; set; }
     public required bool boooll;
 }
 #endif
