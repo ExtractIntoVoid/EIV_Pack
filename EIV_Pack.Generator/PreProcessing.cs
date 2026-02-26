@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Text;
 
 namespace EIV_Pack.Generator;
 
@@ -93,9 +94,31 @@ internal static class PreProcessing
 
     public static List<ISymbol> InitOnly(ref List<ISymbol> symbols)
     {
-        var initOnly = symbols.Where(x => x is IPropertySymbol property && property.SetMethod != null && property.SetMethod.IsInitOnly).ToList();
-        initOnly.AddRange(symbols.Where(x => x is IFieldSymbol fieldSymbol && fieldSymbol.IsRequired));
-        initOnly.AddRange(symbols.Where(x => x is IPropertySymbol property && property.IsRequired));
+        List<ISymbol> initOnly = [];
+
+        foreach (var symbol in symbols)
+        {
+            if (symbol is IFieldSymbol fieldSymbol && fieldSymbol.IsRequired)
+            {
+                initOnly.Add(fieldSymbol);
+                continue;
+            }
+
+            if (symbol is IPropertySymbol propertySymbol)
+            {
+                if (propertySymbol.IsRequired)
+                {
+                    initOnly.Add(symbol);
+                    continue;
+                }
+
+                if (propertySymbol.SetMethod != null && propertySymbol.SetMethod.IsInitOnly)
+                {
+                    initOnly.Add(symbol);
+                    continue;
+                }
+            }
+        }
 
         return initOnly;
     }

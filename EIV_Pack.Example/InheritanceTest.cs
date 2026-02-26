@@ -1,8 +1,14 @@
 ﻿namespace EIV_Pack.Example;
 
-[EIV_Packable]
-public partial class Test
+public interface Itest
 {
+    public int testValeToImp { get; set; }
+}
+
+[EIV_Packable]
+public partial class Test : Itest
+{
+    public int testValeToImp { get; set; }
     public int test;
     public int TESTProp { get; set; }
     [EIV_PackIgnore]
@@ -39,10 +45,16 @@ public partial class MyCor
 }
 
 #if NET8_0_OR_GREATER
-[EIV_Packable]
-public partial class InitTest
+
+public interface IInitTest
 {
     public int Test2 { get; init; }
+}
+
+[EIV_Packable]
+public partial class InitTest : IInitTest
+{
+    public required int Test2 { get; init; }
 
     public int Test { get; set; }
     public required bool boooll;

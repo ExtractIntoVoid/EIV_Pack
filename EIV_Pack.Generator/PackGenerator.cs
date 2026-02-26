@@ -13,16 +13,15 @@ internal static class PackGenerator
         if (typeSymbol == null)
             return;
 
-        var serializables = PreProcessing.GetSerializables(typeSymbol, context, generatorClass.Syntax);
-
-        var initOnly = PreProcessing.InitOnly(ref serializables);
-
         var fullType = typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
            .Replace("global::", "")
            .Replace("<", "_")
            .Replace(">", "_");
 
         var TypeName = typeSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+
+        var serializables = PreProcessing.GetSerializables(typeSymbol, context, generatorClass.Syntax);
+        var initOnly = PreProcessing.InitOnly(ref serializables);     
 
         var classOrStructOrRecord = HelperMethods.ValueName(typeSymbol);
 
