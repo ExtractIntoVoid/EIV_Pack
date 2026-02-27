@@ -84,6 +84,8 @@ public static class FormatterProvider
 
     private static void RegisterFormatters()
     {
+        Register(new StringFormatter());
+        RegisterClass<string>();
         RegisterToAll<SByte>();
         RegisterToAll<Byte>();
         RegisterToAll<Int16>();
@@ -132,5 +134,26 @@ public static class FormatterProvider
         Register(new ArraySegmentFormatter<T>());
         Register(new MemoryFormatter<T>());
         Register(new ReadOnlyMemoryFormatter<T>());
+    }
+
+    /// <summary>
+    /// Register class to more formatters.
+    /// </summary>
+    /// <typeparam name="T">Any class type.</typeparam>
+    /// <remarks>
+    /// It will register as:
+    /// Array, Collection, ObservableCollection, List, LinkedList, HashSet, SortedSet, Queue, Stack.
+    /// </remarks>
+    public static void RegisterClass<T>() where T: class
+    {
+        Register(new ArrayFormatter<T>());
+        Register(new CollectionFormatter<T>());
+        Register(new ObservableCollectionFormatter<T>());
+        Register(new ListFormatter<T>());
+        Register(new LinkedListFormatter<T>());
+        Register(new HashSetFormatter<T>());
+        Register(new SortedSetFormatter<T>());
+        Register(new QueueFormatter<T>());
+        Register(new StackFormatter<T>());
     }
 }
