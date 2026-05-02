@@ -80,6 +80,7 @@ internal static class PackGenerator
             sb.AppendLine(
                 $$"""
 
+                    /// <inheritdoc />
                     static {{typeSymbol.Name}}()
                     {
                         RegisterFormatter();
@@ -95,6 +96,7 @@ internal static class PackGenerator
         sb.AppendLine(
             $$"""
 
+                /// <inheritdoc />
                 public static{{(hasRegister ? " new " : " ")}}void RegisterFormatter()
                 {
                     if (!FormatterProvider.IsRegistered<{{TypeName}}>())
@@ -140,13 +142,16 @@ internal static class PackGenerator
         }
 
         sb.AppendLine($$"""
+                /// <inheritdoc />
                 sealed class {{typeSymbol.Name}}_Formatter{{typeParameterStr}} : BaseFormatter<{{TypeName}}>{{ string.Join("\n, ", HelperMethods.GetWhereClauses(typeSymbol))}}
                 {
+                    /// <inheritdoc />
                     public override void Serialize(ref PackWriter writer, scoped ref readonly {{TypeName}} value)
                     {
                         {{TypeName}}.SerializePackable(ref writer, in value);
                     }
 
+                    /// <inheritdoc />
                     public override void Deserialize(ref PackReader reader, scoped ref {{TypeName}} value)
                     {
                         {{TypeName}}.DeserializePackable(ref reader, ref value);

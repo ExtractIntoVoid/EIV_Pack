@@ -6,6 +6,12 @@ namespace EIV_Pack;
 
 public ref partial struct PackReader
 {
+    /// <summary>
+    /// Reads an <see langword="unmanaged"/> type.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns>The readed <see langword="unmanaged"/> type.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when cannot read the size of the type.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T ReadUnmanaged<T>() where T : unmanaged
     {
@@ -25,18 +31,22 @@ public ref partial struct PackReader
         return value;
     }
 
+    /// <summary>
+    /// Reads an <see langword="unmanaged"/> nullable type.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public T? ReadUnmanagedNullable<T>() where T : unmanaged
     {
         return ReadUnmanaged<byte>() != 0 ? ReadUnmanaged<T>() : default(T?);
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int ReadHeader()
-    {
-        return ReadUnmanaged<int>();
-    }
-
-
+    /// <summary>
+    /// Tries to read <see langword="unmanaged"/> type.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="value"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool TryPeekUnmanaged<T>(out T value) where T : unmanaged
     {
@@ -56,6 +66,16 @@ public ref partial struct PackReader
 
         value = MemoryMarshal.Read<T>(buffer);
         return true;
+    }
+
+    /// <summary>
+    /// Reads an <see langword="int"/> header type.
+    /// </summary>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public int ReadHeader()
+    {
+        return ReadUnmanaged<int>();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

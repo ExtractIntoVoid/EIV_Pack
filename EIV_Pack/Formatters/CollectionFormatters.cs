@@ -13,7 +13,7 @@ public abstract class ICollectionFormatter<T, TCollection> : BaseFormatter<TColl
     /// <summary>
     /// Creates a new collection with a lenght of <paramref name="length"/>.
     /// </summary>
-    /// <param name="length">The new lenght.</param>
+    /// <param name="length">The new length.</param>
     /// <returns>The new collection.</returns>
     public abstract TCollection CreateCollection(int length);
 
