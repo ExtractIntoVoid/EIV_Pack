@@ -4,12 +4,18 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace EIV_Pack.Formatters;
 
+/// <summary>
+/// A <see cref="Lazy{T}"/> formatter.
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public sealed class LazyFormatter<
 #if !NETSTANDARD2_0
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
 #endif
     T> : BaseFormatter<Lazy<T?>>
 {
+
+    /// <inheritdoc />
     public override void Deserialize(ref PackReader reader, scoped ref Lazy<T?>? value)
     {
         if (!reader.TryReadSmallHeader(out byte count) || count == Constants.SmallNullHeader || count != 1)
@@ -22,6 +28,7 @@ public sealed class LazyFormatter<
         value = new Lazy<T?>(() => v);
     }
 
+    /// <inheritdoc />
     public override void Serialize(ref PackWriter writer, scoped ref readonly Lazy<T?>? value)
     {
         if (value == null)

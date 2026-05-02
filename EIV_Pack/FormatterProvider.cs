@@ -70,6 +70,14 @@ public static class FormatterProvider
         return formatter!;
     }
 
+    /// <summary>
+    /// Get the <see cref="IFormatter"/> from the registered formatters.
+    /// </summary>
+    /// <param name="type">The type to get the formatter.</param>
+    /// <returns>The registered <see cref="IFormatter"/>.</returns>
+    /// <remarks>
+    /// If the <paramref name="type"/> has not been registered or is a null formatter it will throw <see cref="PackException"/>.
+    /// </remarks>
     public static IFormatter GetFormatter(Type type)
     {
         if (!formatters.TryGetValue(type, out var formatter))
