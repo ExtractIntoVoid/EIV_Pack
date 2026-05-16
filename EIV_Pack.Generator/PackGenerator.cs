@@ -72,6 +72,7 @@ internal static class PackGenerator
         }
 
         sb.AppendLine();
+        sb.AppendLine("/// <inheritdoc />");
         sb.AppendLine($"partial {classOrStructOrRecord} {TypeName} : IPackable<{TypeName}>");
         sb.AppendLine("{");
 
@@ -199,9 +200,10 @@ internal static class PackGenerator
         string ending = hasInitOnly ? string.Empty : ";";
         string useSmall = FieldAndParamList.Count <= 255 ? "Small" : string.Empty;
 
-        sb.AppendLine($"\tconst int EIV_PACK_FieldAndParamCount = {FieldAndParamList.Count};");
+        sb.AppendLine($"\tprivate const int EIV_PACK_FieldAndParamCount = {FieldAndParamList.Count};");
 
         sb.AppendLine();
+        sb.AppendLine("/// <inheritdoc />");
         sb.AppendLine($"\tpublic static void DeserializePackable(ref PackReader reader, scoped ref {TypeName}{nullable} value)");
         sb.AppendLine("\t{");
 
@@ -237,6 +239,7 @@ internal static class PackGenerator
 
         sb.AppendLine("\t}");
         sb.AppendLine();
+        sb.AppendLine("/// <inheritdoc />");
         sb.AppendLine($"\tpublic static void SerializePackable(ref PackWriter writer, scoped ref readonly {TypeName}{nullable} value)");
         sb.AppendLine("\t{");
 
@@ -277,8 +280,9 @@ internal static class PackGenerator
         string ending = hasInitOnly ? string.Empty : ";";
         string useSmall = FieldAndParamList.Count <= 255 ? "Small" : string.Empty;
 
-        sb.AppendLine($"\tconst int EIV_PACK_FieldAndParamCount = {FieldAndParamList.Count};");
+        sb.AppendLine($"\tprivate const int EIV_PACK_FieldAndParamCount = {FieldAndParamList.Count};");
         sb.AppendLine();
+        sb.AppendLine("/// <inheritdoc />");
         sb.AppendLine($"\tpublic static void DeserializePackable(ref PackReader reader, scoped ref {TypeName} value)");
         sb.AppendLine("\t{");
 
@@ -309,6 +313,7 @@ internal static class PackGenerator
 
         sb.AppendLine("\t}");
         sb.AppendLine();
+        sb.AppendLine("/// <inheritdoc />");
         sb.AppendLine($"\tpublic static void SerializePackable(ref PackWriter writer, scoped ref readonly {TypeName} value)");
         sb.AppendLine("\t{");
         sb.AppendLine($"\t\twriter.Write{useSmall}Header(EIV_PACK_FieldAndParamCount);");
@@ -329,6 +334,7 @@ internal static class PackGenerator
         var TypeName = typeSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
 
         sb.AppendLine();
+        sb.AppendLine("/// <inheritdoc />");
         sb.AppendLine($"\tpublic static void DeserializePackable(ref PackReader reader, scoped ref {TypeName} value)");
         sb.AppendLine("\t{");
 
@@ -369,6 +375,7 @@ internal static class PackGenerator
 
         sb.AppendLine("\t}");
         sb.AppendLine();
+        sb.AppendLine("/// <inheritdoc />");
         sb.AppendLine($"\tpublic static void SerializePackable(ref PackWriter writer, scoped ref readonly {TypeName} value)");
         sb.AppendLine("\t{");
         sb.AppendLine($"\t\twriter.WriteHeader({FieldAndParamList.Count});");
@@ -391,6 +398,7 @@ internal static class PackGenerator
         var nullable = isNet8OrGreater ? "?" : string.Empty;
 
         sb.AppendLine();
+        sb.AppendLine("/// <inheritdoc />");
         sb.AppendLine($"\tpublic static void DeserializePackable(ref PackReader reader, scoped ref {TypeName}{nullable} value)");
         sb.AppendLine("\t{");
 
@@ -431,6 +439,7 @@ internal static class PackGenerator
 
         sb.AppendLine("\t}");
         sb.AppendLine();
+        sb.AppendLine("/// <inheritdoc />");
         sb.AppendLine($"\tpublic static void SerializePackable(ref PackWriter writer, scoped ref readonly {TypeName}{nullable} value)");
         sb.AppendLine("\t{");
         sb.AppendLine(

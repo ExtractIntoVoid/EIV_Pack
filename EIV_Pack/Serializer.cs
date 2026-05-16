@@ -2,8 +2,17 @@
 
 namespace EIV_Pack;
 
+/// <summary>
+/// Static helpers for serializing and deserializing values and arrays to and from binary representations.
+/// </summary>
 public static class Serializer
 {
+    /// <summary>
+    /// Serialize <typeparamref name="T"/> array.
+    /// </summary>
+    /// <typeparam name="T">Any registered type.</typeparam>
+    /// <param name="value">The values to serialize.</param>
+    /// <returns>The serialized data array.</returns>
     public static byte[] SerializeArray<T>(in T?[]? value)
     {
         if (value == null)
@@ -19,6 +28,12 @@ public static class Serializer
         return bytes;
     }
 
+    /// <summary>
+    /// Serialize <typeparamref name="T"/> array.
+    /// </summary>
+    /// <typeparam name="T">Any registered type.</typeparam>
+    /// <param name="value">The values to serialize.</param>
+    /// <returns>The serialized data segment.</returns>
     public static ArraySegment<byte> SerializeArray_Segment<T>(in T?[]? value)
     {
         if (value == null)
@@ -40,6 +55,12 @@ public static class Serializer
         return bytes;
     }
 
+    /// <summary>
+    /// Serialize <typeparamref name="T"/> array.
+    /// </summary>
+    /// <typeparam name="T">Any registered type.</typeparam>
+    /// <param name="value">The values to serialize.</param>
+    /// <returns>The serialized data sequence.</returns>
     public static ReadOnlySequence<byte> SerializeArray_Sequence<T>(in T?[]? value)
     {
         if (value == null)
@@ -55,6 +76,12 @@ public static class Serializer
         return bytes;
     }
 
+    /// <summary>
+    /// Deserialize <typeparamref name="T"/> array.
+    /// </summary>
+    /// <typeparam name="T">Any registered type.</typeparam>
+    /// <param name="bytes">The input serialized data.</param>
+    /// <returns>The deserialized values.</returns>
     public static T?[]? DeserializeArray<T>(in byte[] bytes)
     {
         if (bytes.Length == 0)
@@ -67,6 +94,12 @@ public static class Serializer
         return reader.ReadArray<T>();
     }
 
+    /// <summary>
+    /// Deserialize <typeparamref name="T"/> array.
+    /// </summary>
+    /// <typeparam name="T">Any registered type.</typeparam>
+    /// <param name="bytes">The input serialized data.</param>
+    /// <returns>The deserialized values.</returns>
     public static T?[]? DeserializeArray<T>(in ReadOnlySpan<byte> bytes)
     {
         if (bytes.Length == 0)
@@ -79,6 +112,12 @@ public static class Serializer
         return reader.ReadArray<T>();
     }
 
+    /// <summary>
+    /// Deserialize <typeparamref name="T"/> array.
+    /// </summary>
+    /// <typeparam name="T">Any registered type.</typeparam>
+    /// <param name="bytes">The input serialized data.</param>
+    /// <returns>The deserialized values.</returns>
     public static T?[]? DeserializeArray<T>(in ReadOnlySequence<byte> bytes)
     {
         if (bytes.Length == 0)
@@ -91,6 +130,12 @@ public static class Serializer
         return reader.ReadArray<T>();
     }
 
+    /// <summary>
+    /// Serialize <typeparamref name="T"/> value.
+    /// </summary>
+    /// <typeparam name="T">Any registered type.</typeparam>
+    /// <param name="value">The value to serialize.</param>
+    /// <returns>The serialized data.</returns>
     public static byte[] Serialize<T>(in T? value)
     {
         using PackWriter writer = new();
@@ -100,6 +145,12 @@ public static class Serializer
         return bytes;
     }
 
+    /// <summary>
+    /// Serialize <typeparamref name="T"/> value.
+    /// </summary>
+    /// <typeparam name="T">Any registered type.</typeparam>
+    /// <param name="value">The value to serialize.</param>
+    /// <returns>The serialized data segment.</returns>
     public static ArraySegment<byte> Serialize_Segment<T>(in T? value)
     {
         using PackWriter writer = new();
@@ -109,6 +160,12 @@ public static class Serializer
         return bytes;
     }
 
+    /// <summary>
+    /// Serialize <typeparamref name="T"/> value.
+    /// </summary>
+    /// <typeparam name="T">Any registered type.</typeparam>
+    /// <param name="value">The value to serialize.</param>
+    /// <returns>The serialized data sequence.</returns>
     public static ReadOnlySequence<byte> Serialize_Sequence<T>(in T? value)
     {
         using PackWriter writer = new();
@@ -118,6 +175,12 @@ public static class Serializer
         return bytes;
     }
 
+    /// <summary>
+    /// Deserialize <typeparamref name="T"/> value.
+    /// </summary>
+    /// <typeparam name="T">Any registered type.</typeparam>
+    /// <param name="bytes">The input serialized data.</param>
+    /// <returns>The deserialized value.</returns>
     public static T? Deserialize<T>(in byte[] bytes)
     {
         T? value = default;
@@ -126,6 +189,12 @@ public static class Serializer
         return value;
     }
 
+    /// <summary>
+    /// Deserialize <typeparamref name="T"/> value.
+    /// </summary>
+    /// <typeparam name="T">Any registered type.</typeparam>
+    /// <param name="bytes">The input serialized data.</param>
+    /// <returns>The deserialized value.</returns>
     public static T? Deserialize<T>(in ReadOnlySpan<byte> bytes)
     {
         T? value = default;
@@ -134,6 +203,12 @@ public static class Serializer
         return value;
     }
 
+    /// <summary>
+    /// Deserialize <typeparamref name="T"/> value.
+    /// </summary>
+    /// <typeparam name="T">Any registered type.</typeparam>
+    /// <param name="bytes">The input serialized data.</param>
+    /// <returns>The deserialized value.</returns>
     public static T? Deserialize<T>(in ReadOnlySequence<byte> bytes)
     {
         T? value = default;
@@ -142,18 +217,36 @@ public static class Serializer
         return value;
     }
 
+    /// <summary>
+    /// Deserialize <typeparamref name="T"/> value.
+    /// </summary>
+    /// <typeparam name="T">Any registered type.</typeparam>
+    /// <param name="bytes">The input serialized data.</param>
+    /// <param name="value">The reference to deserialize the value to.</param>
     public static void Deserialize<T>(in byte[] bytes, scoped ref T? value)
     {
         PackReader reader = new(bytes);
         reader.ReadValue(ref value);
     }
 
+    /// <summary>
+    /// Deserialize <typeparamref name="T"/> value.
+    /// </summary>
+    /// <typeparam name="T">Any registered type.</typeparam>
+    /// <param name="bytes">The input serialized data.</param>
+    /// <param name="value">The reference to deserialize the value to.</param>
     public static void Deserialize<T>(in ReadOnlySpan<byte> bytes, scoped ref T? value)
     {
         PackReader reader = new(bytes);
         reader.ReadValue(ref value);
     }
 
+    /// <summary>
+    /// Deserialize <typeparamref name="T"/> value.
+    /// </summary>
+    /// <typeparam name="T">Any registered type.</typeparam>
+    /// <param name="bytes">The input serialized data.</param>
+    /// <param name="value">The reference to deserialize the value to.</param>
     public static void Deserialize<T>(in ReadOnlySequence<byte> bytes, scoped ref T? value)
     {
         PackReader reader = new(bytes);

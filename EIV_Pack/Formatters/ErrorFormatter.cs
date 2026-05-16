@@ -9,12 +9,12 @@ public class ErrorFormatter<T> : BaseFormatter<T>
     /// <inheritdoc />
     public override void Deserialize(ref PackReader reader, scoped ref T? value)
     {
-        PackException.ThrowNotRegisteredInProvider(typeof(T));
+        throw new PackException($"{typeof(T).FullName} is not registered in this provider.");
     }
 
     /// <inheritdoc />
     public override void Serialize(ref PackWriter writer, scoped ref readonly T? value)
     {
-        PackException.ThrowNotRegisteredInProvider(typeof(T));
+        throw new PackException($"{typeof(T).FullName} is not registered in this provider.");
     }
 }

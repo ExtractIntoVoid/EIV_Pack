@@ -55,19 +55,14 @@ public static class FormatterProvider
     /// </summary>
     /// <typeparam name="T">The type to get the formatter.</typeparam>
     /// <returns>The cached <see cref="IFormatter{T}"/>.</returns>
-    /// <remarks>
-    /// If the <typeparamref name="T"/> type has not been registered or is a null formatter it will throw <see cref="PackException"/>.
-    /// </remarks>
+    /// <exception cref="PackException">If the <typeparamref name="T"/> type has not been registered or is a null formatter it will throw.</exception>
     public static IFormatter<T> GetFormatter<T>()
     {
         if (!IsRegistered<T>())
-            PackException.ThrowNotRegisteredInProvider(typeof(T));
+            throw new PackException($"{typeof(T).FullName} is not registered in this provider.");
 
-        var formatter = Cache<T>.Formatter;
-        if (formatter == null)
-            PackException.ThrowNotRegisteredInProvider(typeof(T));
-
-        return formatter!;
+        IFormatter<T>? formatter = Cache<T>.Formatter;
+        return formatter ?? throw new PackException($"{typeof(T).FullName} is not registered in this provider.");
     }
 
     /// <summary>
@@ -75,15 +70,11 @@ public static class FormatterProvider
     /// </summary>
     /// <param name="type">The type to get the formatter.</param>
     /// <returns>The registered <see cref="IFormatter"/>.</returns>
-    /// <remarks>
-    /// If the <paramref name="type"/> has not been registered or is a null formatter it will throw <see cref="PackException"/>.
-    /// </remarks>
+    /// <exception cref="PackException">If the <paramref name="type"/> has not been registered or is a null formatter it will throw.</exception>
     public static IFormatter GetFormatter(Type type)
     {
-        if (!formatters.TryGetValue(type, out var formatter))
-        {
-            PackException.ThrowNotRegisteredInProvider(type);
-        }
+        if (!formatters.TryGetValue(type, out IFormatter? formatter) || formatter == null)
+            throw new PackException($"{type.FullName} is not registered in this provider.");
 
         return formatter;
     }
