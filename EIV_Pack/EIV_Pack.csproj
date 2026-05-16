@@ -12,8 +12,8 @@
 		<PackageProjectUrl>https://github.com/ExtractIntoVoid/EIV_Pack</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-		<Version>2.3</Version>
-		<FileVersion>2.3</FileVersion>
+		<Version>2.3.1</Version>
+		<FileVersion>2.3.1</FileVersion>
 		<LangVersion>latest</LangVersion>
 
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
