@@ -3,6 +3,9 @@ using System.Runtime.CompilerServices;
 
 namespace EIV_Pack;
 
+/// <summary>
+/// Writer that serialize data.
+/// </summary>
 public ref partial struct PackWriter : IDisposable
 {
     /// <summary>
@@ -17,7 +20,9 @@ public ref partial struct PackWriter : IDisposable
     {
         depth++;
         if (depth == DepthLimit)
+        {
             throw new PackException($"Serializing Type '{typeof(T).FullName}' reached depth limit, maybe detect circular reference.");
+        }
 
 #if !NETSTANDARD2_0
         T.SerializePackable(ref this, ref Unsafe.AsRef(in value));
@@ -40,7 +45,9 @@ public ref partial struct PackWriter : IDisposable
     {
         depth++;
         if (depth == DepthLimit)
+        {
             throw new PackException($"Serializing Type '{typeof(T).FullName}' reached depth limit, maybe detect circular reference.");
+        }
 
         IFormatter<T> formatter = FormatterProvider.GetFormatter<T>();
         formatter.Serialize(ref this, ref Unsafe.AsRef(in value));
@@ -70,6 +77,11 @@ public ref partial struct PackWriter : IDisposable
     /// <param name="value">The value to write.</param>
     public void WriteValueWithFormatter(IFormatter formatter, scoped in object? value)
     {
+        if (formatter == null)
+        {
+            return;
+        }
+
         depth++;
         formatter.Serialize(ref this, ref Unsafe.AsRef(in value));
         depth--;

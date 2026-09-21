@@ -16,10 +16,14 @@ public static class Serializer
     public static byte[] SerializeArray<T>(in T?[]? value)
     {
         if (value == null)
+        {
             return [];
+        }
 
         if (value.Length == 0)
+        {
             return Constants.EmptyCollection.ToArray();
+        }
 
         using PackWriter writer = new();
         writer.WriteArray(value);
@@ -37,7 +41,9 @@ public static class Serializer
     public static ArraySegment<byte> SerializeArray_Segment<T>(in T?[]? value)
     {
         if (value == null)
+        {
             return [];
+        }
 
         if (value.Length == 0)
         {
@@ -64,10 +70,14 @@ public static class Serializer
     public static ReadOnlySequence<byte> SerializeArray_Sequence<T>(in T?[]? value)
     {
         if (value == null)
+        {
             return ReadOnlySequence<byte>.Empty;
+        }
 
         if (value.Length == 0)
+        {
             return new(Constants.EmptyCollection.ToArray());
+        }
 
         using PackWriter writer = new();
         writer.WriteArray(value);
@@ -84,11 +94,15 @@ public static class Serializer
     /// <returns>The deserialized values.</returns>
     public static T?[]? DeserializeArray<T>(in byte[] bytes)
     {
-        if (bytes.Length == 0)
+        if (bytes == null || bytes.Length == 0)
+        {
             return null;
+        }
 
         if (Constants.EmptyCollection.SequenceEqual(bytes))
+        {
             return [];
+        }
 
         PackReader reader = new(bytes);
         return reader.ReadArray<T>();
@@ -103,10 +117,14 @@ public static class Serializer
     public static T?[]? DeserializeArray<T>(in ReadOnlySpan<byte> bytes)
     {
         if (bytes.Length == 0)
+        {
             return null;
+        }
 
         if (Constants.EmptyCollection.SequenceEqual(bytes))
+        {
             return [];
+        }
 
         PackReader reader = new(bytes);
         return reader.ReadArray<T>();
@@ -121,10 +139,14 @@ public static class Serializer
     public static T?[]? DeserializeArray<T>(in ReadOnlySequence<byte> bytes)
     {
         if (bytes.Length == 0)
+        {
             return null;
+        }
 
         if (Constants.EmptyCollection.SequenceEqual(bytes.First.Span))
+        {
             return [];
+        }
 
         PackReader reader = new(bytes);
         return reader.ReadArray<T>();

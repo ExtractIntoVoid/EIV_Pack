@@ -4,6 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace EIV_Pack;
 
+/// <summary>
+/// Writer that serialize data.
+/// </summary>
 public ref partial struct PackWriter : IDisposable
 {
     /// <summary>
@@ -11,7 +14,8 @@ public ref partial struct PackWriter : IDisposable
     /// </summary>
     /// <typeparam name="T">The unmanaged type of the value to write.</typeparam>
     /// <param name="value">The value to write into the buffer.</param>
-    public readonly unsafe void WriteUnmanaged<T>(scoped in T value) where T : unmanaged
+    public readonly unsafe void WriteUnmanaged<T>(scoped in T value)
+        where T : unmanaged
     {
         int size = sizeof(T);
         Span<byte> span = recyclable.GetSpan(size);
@@ -29,12 +33,15 @@ public ref partial struct PackWriter : IDisposable
     /// </summary>
     /// <typeparam name="T">The unmanaged type of the value to write.</typeparam>
     /// <param name="value">The value to write into the buffer.</param>
-    public readonly void WriteUnmanagedNullable<T>(scoped in T? value) where T : unmanaged
+    public readonly void WriteUnmanagedNullable<T>(scoped in T? value)
+        where T : unmanaged
     {
         WriteUnmanaged(value.HasValue);
 
         if (value.HasValue)
+        {
             WriteUnmanaged(value.Value);
+        }
     }
 
     /// <summary>
@@ -91,7 +98,6 @@ public ref partial struct PackWriter : IDisposable
             return;
         }
 
-
         IFormatter<T> formatter = FormatterProvider.GetFormatter<T>();
 
         WriteHeader(array.Length);
@@ -106,7 +112,8 @@ public ref partial struct PackWriter : IDisposable
     /// </summary>
     /// <typeparam name="T">Any type.</typeparam>
     /// <param name="array">The values to write.</param>
-    public readonly void WriteArrayUnmanaged<T>(T?[]? array) where T : unmanaged
+    public readonly void WriteArrayUnmanaged<T>(T?[]? array)
+        where T : unmanaged
     {
         if (array == null)
         {
@@ -132,7 +139,9 @@ public ref partial struct PackWriter : IDisposable
         IFormatter<T> formatter = FormatterProvider.GetFormatter<T>();
 
         if (useHeader)
+        {
             WriteHeader(value.Length);
+        }
 
         for (int i = 0; i < value.Length; i++)
         {
@@ -146,10 +155,13 @@ public ref partial struct PackWriter : IDisposable
     /// <typeparam name="T">Any type.</typeparam>
     /// <param name="value">The values to write.</param>
     /// <param name="useHeader">Whether it should write the length.</param>
-    public readonly void WriteSpanUnmanaged<T>(scoped Span<T?> value, bool useHeader = true) where T : unmanaged
+    public readonly void WriteSpanUnmanaged<T>(scoped Span<T?> value, bool useHeader = true)
+        where T : unmanaged
     {
         if (useHeader)
+        {
             WriteHeader(value.Length);
+        }
 
         for (int i = 0; i < value.Length; i++)
         {
@@ -168,7 +180,9 @@ public ref partial struct PackWriter : IDisposable
         IFormatter<T> formatter = FormatterProvider.GetFormatter<T>();
 
         if (useHeader)
+        {
             WriteHeader(value.Length);
+        }
 
         for (int i = 0; i < value.Length; i++)
         {
@@ -182,10 +196,13 @@ public ref partial struct PackWriter : IDisposable
     /// <typeparam name="T">Any type.</typeparam>
     /// <param name="value">The values to write.</param>
     /// <param name="useHeader">Whether it should write the length.</param>
-    public readonly void WriteSpanUnmanaged<T>(scoped ReadOnlySpan<T?> value, bool useHeader = true) where T : unmanaged
+    public readonly void WriteSpanUnmanaged<T>(scoped ReadOnlySpan<T?> value, bool useHeader = true)
+        where T : unmanaged
     {
         if (useHeader)
+        {
             WriteHeader(value.Length);
+        }
 
         for (int i = 0; i < value.Length; i++)
         {

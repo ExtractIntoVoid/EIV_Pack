@@ -4,8 +4,9 @@ namespace EIV_Pack.Formatters;
 /// <summary>
 /// An <see cref="IPackable{T}"/> formatter.
 /// </summary>
-/// <typeparam name="T"></typeparam>
-public sealed class EIV_Formatter<T> : BaseFormatter<T> where T : IPackable<T>
+/// <typeparam name="T">Any type.</typeparam>
+public sealed class EIV_Formatter<T> : BaseFormatter<T>
+    where T : IPackable<T>
 {
     /// <inheritdoc />
     public override void Deserialize(ref PackReader reader, scoped ref T? value)

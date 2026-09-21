@@ -3,8 +3,8 @@
 /// <summary>
 /// A <see cref="KeyValuePair{TKey, TValue}"/> formatter.
 /// </summary>
-/// <typeparam name="TKey"></typeparam>
-/// <typeparam name="TValue"></typeparam>
+/// <typeparam name="TKey">Any type for key.</typeparam>
+/// <typeparam name="TValue">Any type for value.</typeparam>
 public sealed class KeyValuePairFormatter<TKey, TValue> : BaseFormatter<KeyValuePair<TKey?, TValue?>>
 {
     /// <inheritdoc />
@@ -12,8 +12,7 @@ public sealed class KeyValuePairFormatter<TKey, TValue> : BaseFormatter<KeyValue
     {
         value = new KeyValuePair<TKey?, TValue?>(
             reader.ReadValue<TKey>(),
-            reader.ReadValue<TValue>()
-        );
+            reader.ReadValue<TValue>());
     }
 
     /// <inheritdoc />

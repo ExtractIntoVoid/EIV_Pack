@@ -1,6 +1,9 @@
 <Solution>
-  <Project Path="EIV_Pack.Example/EIV_Pack.Example.csproj" Id="2596f810-3cc7-4675-9dc2-b54f53e50eb6" />
-  <Project Path="EIV_Pack.Generator/EIV_Pack.Generator.csproj" Id="943018e4-a3b9-4f3b-ab87-5fbb628c90a3" />
-  <Project Path="EIV_Pack.Test/EIV_Pack.Test.csproj" Id="fd9a62ac-d45a-4c77-9c37-cbe5db29c7cc" />
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="EIV_Pack.Example/EIV_Pack.Example.csproj" />
+  <Project Path="EIV_Pack.Generator/EIV_Pack.Generator.csproj" />
+  <Project Path="EIV_Pack.Test/EIV_Pack.Test.csproj" />
   <Project Path="EIV_Pack/EIV_Pack.csproj" />
 </Solution>

@@ -3,8 +3,9 @@
 /// <summary>
 /// An <see langword="unmanaged"/> formatter.
 /// </summary>
-/// <typeparam name="T"></typeparam>
-public sealed class UnmanagedFormatter<T> : BaseFormatter<T> where T : unmanaged
+/// <typeparam name="T">Any <see langword="unmanaged"/> type.</typeparam>
+public sealed class UnmanagedFormatter<T> : BaseFormatter<T>
+    where T : unmanaged
 {
     /// <inheritdoc />
     public override void Deserialize(ref PackReader reader, scoped ref T value)

@@ -3,7 +3,7 @@
 /// <summary>
 /// A formatter ot throw error when something is not registered.
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">Any type.</typeparam>
 public class ErrorFormatter<T> : BaseFormatter<T>
 {
     /// <inheritdoc />

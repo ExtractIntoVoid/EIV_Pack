@@ -9,12 +9,14 @@ namespace EIV_Pack;
 /// </summary>
 public static class FormatterProvider
 {
-    static readonly ConcurrentDictionary<Type, IFormatter> formatters = new(Environment.ProcessorCount, 150);
+    private static readonly ConcurrentDictionary<Type, IFormatter> Formatters = new(Environment.ProcessorCount, 150);
 
     static FormatterProvider()
     {
         if (Constants.IsRegisterDefaultFormatters)
+        {
             RegisterFormatters();
+        }
     }
 
     /// <summary>
@@ -36,7 +38,7 @@ public static class FormatterProvider
     {
         Cache<T>.IsRegistered = true;
         Cache<T>.Formatter = formatter;
-        formatters[typeof(T)] = formatter;
+        Formatters[typeof(T)] = formatter;
     }
 
 #if !NETSTANDARD2_0
@@ -44,7 +46,8 @@ public static class FormatterProvider
     /// Registers a <typeparamref name="T"/> into type cache.
     /// </summary>
     /// <typeparam name="T">Type to register.</typeparam>
-    public static void Register<T>() where T : IFormatterRegister
+    public static void Register<T>()
+        where T : IFormatterRegister
     {
         T.RegisterFormatter();
     }
@@ -59,7 +62,9 @@ public static class FormatterProvider
     public static IFormatter<T> GetFormatter<T>()
     {
         if (!IsRegistered<T>())
+        {
             throw new PackException($"{typeof(T).FullName} is not registered in this provider.");
+        }
 
         IFormatter<T>? formatter = Cache<T>.Formatter;
         return formatter ?? throw new PackException($"{typeof(T).FullName} is not registered in this provider.");
@@ -73,33 +78,68 @@ public static class FormatterProvider
     /// <exception cref="PackException">If the <paramref name="type"/> has not been registered or is a null formatter it will throw.</exception>
     public static IFormatter GetFormatter(Type type)
     {
-        if (!formatters.TryGetValue(type, out IFormatter? formatter) || formatter == null)
+#if !NETSTANDARD2_0
+        ArgumentNullException.ThrowIfNull(type);
+#else
+        if (type == null)
+        {
+            throw new ArgumentNullException(nameof(type));
+        }
+#endif
+
+        if (!Formatters.TryGetValue(type, out IFormatter? formatter) || formatter == null)
+        {
             throw new PackException($"{type.FullName} is not registered in this provider.");
+        }
 
         return formatter;
+    }
+
+    /// <summary>
+    /// Register class to more formatters.
+    /// </summary>
+    /// <typeparam name="T">Any class type.</typeparam>
+    /// <remarks>
+    /// It will register as:
+    /// Array, Collection, ObservableCollection, List, LinkedList, HashSet, SortedSet, Queue, Stack.
+    /// </remarks>
+    public static void RegisterCollection<T>()
+    {
+        Register(new ArrayFormatter<T>());
+        Register(new ArraySegmentFormatter<T>());
+        Register(new MemoryFormatter<T>());
+        Register(new ReadOnlyMemoryFormatter<T>());
+        Register(new CollectionFormatter<T>());
+        Register(new ObservableCollectionFormatter<T>());
+        Register(new ListFormatter<T>());
+        Register(new LinkedListFormatter<T>());
+        Register(new HashSetFormatter<T>());
+        Register(new SortedSetFormatter<T>());
+        Register(new QueueFormatter<T>());
+        Register(new StackFormatter<T>());
     }
 
     private static void RegisterFormatters()
     {
         Register(new StringFormatter());
         RegisterCollection<string>();
-        RegisterToAll<SByte>();
-        RegisterToAll<Byte>();
-        RegisterToAll<Int16>();
-        RegisterToAll<UInt16>();
-        RegisterToAll<Int32>();
-        RegisterToAll<UInt32>();
-        RegisterToAll<Int64>();
-        RegisterToAll<UInt64>();
+        RegisterToAll<sbyte>();
+        RegisterToAll<byte>();
+        RegisterToAll<short>();
+        RegisterToAll<ushort>();
+        RegisterToAll<int>();
+        RegisterToAll<uint>();
+        RegisterToAll<long>();
+        RegisterToAll<ulong>();
 #if !NETSTANDARD2_0
         RegisterToAll<UInt128>();
         RegisterToAll<Int128>();
 #endif
-        RegisterToAll<Char>();
-        RegisterToAll<Single>();
-        RegisterToAll<Double>();
-        RegisterToAll<Decimal>();
-        RegisterToAll<Boolean>();
+        RegisterToAll<char>();
+        RegisterToAll<float>();
+        RegisterToAll<double>();
+        RegisterToAll<decimal>();
+        RegisterToAll<bool>();
         RegisterToAll<IntPtr>();
         RegisterToAll<UIntPtr>();
 #if !NETSTANDARD2_0
@@ -123,7 +163,8 @@ public static class FormatterProvider
         RegisterToAll<Vector4>();
     }
 
-    private static void RegisterToAll<T>() where T : unmanaged
+    private static void RegisterToAll<T>()
+        where T : unmanaged
     {
         Register(new UnmanagedFormatter<T>());
         Register(new NullableUnmanagedFormatter<T>());
@@ -131,30 +172,6 @@ public static class FormatterProvider
         Register(new ArraySegmentUnmanagedFormatter<T>());
         Register(new MemoryUnmanagedFormatter<T>());
         Register(new ReadOnlyMemoryUnmanagedFormatter<T>());
-        Register(new CollectionFormatter<T>());
-        Register(new ObservableCollectionFormatter<T>());
-        Register(new ListFormatter<T>());
-        Register(new LinkedListFormatter<T>());
-        Register(new HashSetFormatter<T>());
-        Register(new SortedSetFormatter<T>());
-        Register(new QueueFormatter<T>());
-        Register(new StackFormatter<T>());
-    }
-
-    /// <summary>
-    /// Register class to more formatters.
-    /// </summary>
-    /// <typeparam name="T">Any class type.</typeparam>
-    /// <remarks>
-    /// It will register as:
-    /// Array, Collection, ObservableCollection, List, LinkedList, HashSet, SortedSet, Queue, Stack.
-    /// </remarks>
-    public static void RegisterCollection<T>()
-    {
-        Register(new ArrayFormatter<T>());
-        Register(new ArraySegmentFormatter<T>());
-        Register(new MemoryFormatter<T>());
-        Register(new ReadOnlyMemoryFormatter<T>());
         Register(new CollectionFormatter<T>());
         Register(new ObservableCollectionFormatter<T>());
         Register(new ListFormatter<T>());

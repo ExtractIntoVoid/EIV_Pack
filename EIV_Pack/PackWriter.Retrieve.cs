@@ -1,8 +1,10 @@
-﻿using Microsoft.IO;
-using System.Buffers;
+﻿using System.Buffers;
 
 namespace EIV_Pack;
 
+/// <summary>
+/// Writer that serialize data.
+/// </summary>
 public ref partial struct PackWriter : IDisposable
 {
     /// <summary>
@@ -15,7 +17,7 @@ public ref partial struct PackWriter : IDisposable
     }
 
     /// <summary>
-    /// Returns a segment containing the contents of the writer
+    /// Returns a segment containing the contents of the writer.
     /// </summary>
     /// <returns>A <see cref="ArraySegment{T}"/> of bytes.</returns>
     public readonly ArraySegment<byte> GetAsSegment()

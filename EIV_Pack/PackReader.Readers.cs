@@ -4,16 +4,20 @@ using System.Runtime.InteropServices;
 
 namespace EIV_Pack;
 
+/// <summary>
+/// A reader struct for reading a packed data.
+/// </summary>
 public ref partial struct PackReader
 {
     /// <summary>
     /// Reads an <see langword="unmanaged"/> type.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">Any <see langword="unmanaged"/> type.</typeparam>
     /// <returns>The readed <see langword="unmanaged"/> type.</returns>
     /// <exception cref="InvalidOperationException">Thrown when cannot read the size of the type.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public T ReadUnmanaged<T>() where T : unmanaged
+    public T ReadUnmanaged<T>()
+        where T : unmanaged
     {
         int size = Unsafe.SizeOf<T>();
         if (Remaining < size)
@@ -34,9 +38,10 @@ public ref partial struct PackReader
     /// <summary>
     /// Reads an <see langword="unmanaged"/> nullable type.
     /// </summary>
-    /// <typeparam name="T">Any <see langword="unmanaged"/> type</typeparam>
+    /// <typeparam name="T">Any <see langword="unmanaged"/> type.</typeparam>
     /// <returns>The value or <see langword="null"/>.</returns>
-    public T? ReadUnmanagedNullable<T>() where T : unmanaged
+    public T? ReadUnmanagedNullable<T>()
+        where T : unmanaged
     {
         return ReadUnmanaged<byte>() != 0 ? ReadUnmanaged<T>() : default(T?);
     }
@@ -44,11 +49,12 @@ public ref partial struct PackReader
     /// <summary>
     /// Tries to read <see langword="unmanaged"/> type.
     /// </summary>
-    /// <typeparam name="T">Any <see langword="unmanaged"/> type</typeparam>
+    /// <typeparam name="T">Any <see langword="unmanaged"/> type.</typeparam>
     /// <param name="value">The value or <see langword="null"/>.</param>
     /// <returns><see langword="true"/> if successfully read the <paramref name="value"/>; otherwise, <see langword="false"/>.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool TryPeekUnmanaged<T>(out T value) where T : unmanaged
+    public readonly bool TryPeekUnmanaged<T>(out T value)
+        where T : unmanaged
     {
         int size = Unsafe.SizeOf<T>();
         if (Remaining < size)
@@ -57,11 +63,11 @@ public ref partial struct PackReader
             return false;
         }
 
-        ReadOnlySpan<byte> buffer = currentBuffer
+        ReadOnlySpan<byte> buffer =
 #if !NETSTANDARD2_0
-        [..size];
+        currentBuffer[..size];
 #else
-        .Slice(0, size);
+        currentBuffer.Slice(0, size);
 #endif
 
         value = MemoryMarshal.Read<T>(buffer);
@@ -98,7 +104,9 @@ public ref partial struct PackReader
     public bool TryReadHeader(out int value)
     {
         if (!TryPeekUnmanaged(out value))
+        {
             return false;
+        }
 
         Advance(4);
         return true;
@@ -113,7 +121,9 @@ public ref partial struct PackReader
     public bool TryReadSmallHeader(out byte value)
     {
         if (!TryPeekUnmanaged(out value))
+        {
             return false;
+        }
 
         Advance(1);
         return true;
@@ -127,7 +137,9 @@ public ref partial struct PackReader
     public readonly bool PeekIsNullOrEmpty()
     {
         if (!TryPeekHeader(out int len))
+        {
             return true;
+        }
 
         return len == Constants.NullHeader;
     }
@@ -145,7 +157,9 @@ public ref partial struct PackReader
         }
 
         if (len == 0)
+        {
             return string.Empty;
+        }
 
 #if !NETSTANDARD2_0
         string str = TextEncoding.GetString(currentBuffer[..len]);
@@ -212,6 +226,11 @@ public ref partial struct PackReader
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void ReadValue<T>(scoped ref T? value, IFormatter<T> formatter)
     {
+        if (formatter == null)
+        {
+            return;
+        }
+
         formatter.Deserialize(ref this, ref value);
     }
 
@@ -222,6 +241,11 @@ public ref partial struct PackReader
     /// <param name="formatter">The formatter to deserialize the value with.</param>
     public void ReadValue(scoped ref object? value, IFormatter formatter)
     {
+        if (formatter == null)
+        {
+            return;
+        }
+
         formatter.Deserialize(ref this, ref value);
     }
 
@@ -247,6 +271,11 @@ public ref partial struct PackReader
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T? ReadValueWithFormatter<T>(IFormatter<T> formatter)
     {
+        if (formatter == null)
+        {
+            return default;
+        }
+
         T? value = default;
         formatter.Deserialize(ref this, ref value);
         return value;
@@ -330,7 +359,8 @@ public ref partial struct PackReader
     /// <typeparam name="T">Any <see langword="unmanaged"/> registered type.</typeparam>
     /// <returns>The read <typeparamref name="T"/> array; otherwise, <see langword="default"/>.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public T?[]? ReadArrayUnmanaged<T>() where T : unmanaged
+    public T?[]? ReadArrayUnmanaged<T>()
+        where T : unmanaged
     {
         T?[]? value = default;
         ReadArrayUnmanaged(ref value);
@@ -343,7 +373,8 @@ public ref partial struct PackReader
     /// <typeparam name="T">Any <see langword="unmanaged"/> registered type.</typeparam>
     /// <param name="value">The value reference to read to.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void ReadArrayUnmanaged<T>(scoped ref T?[]? value) where T : unmanaged
+    public void ReadArrayUnmanaged<T>(scoped ref T?[]? value)
+        where T : unmanaged
     {
         if (!TryReadHeader(out int length) || length == Constants.NullHeader)
         {
@@ -375,7 +406,8 @@ public ref partial struct PackReader
     /// <param name="value">The value reference to read to.</param>
     /// <param name="length">The length of the values to read.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void ReadArrayUnmanaged<T>(scoped ref T?[]? value, int length) where T : unmanaged
+    public void ReadArrayUnmanaged<T>(scoped ref T?[]? value, int length)
+        where T : unmanaged
     {
         if (length == 0)
         {

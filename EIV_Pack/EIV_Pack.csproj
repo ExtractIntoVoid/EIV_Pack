@@ -1,39 +1,67 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-		<PropertyGroup>	  
-		<TargetFrameworks>net10.0;net8.0;netstandard2.0</TargetFrameworks>
+	<!-- Main Properties -->
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;net8.0;net10.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Title>Serialization for EIV</Title>
-		<Authors>ExtractIntoVoid;SlejmUr</Authors>
-		<Company>ExtractIntoVoid</Company>
-		<Description>Serialization Pack</Description>
-		<Copyright>ExtractIntoVoid</Copyright>
-		<PackageProjectUrl>https://github.com/ExtractIntoVoid/EIV_Pack</PackageProjectUrl>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-		<Version>2.3.1</Version>
-		<FileVersion>2.3.1</FileVersion>
 		<LangVersion>latest</LangVersion>
 
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	  
+		<!-- Package related -->
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+		<!-- Analyzers -->
 		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
 		<EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
 		<EnableAotAnalyzer>true</EnableAotAnalyzer>
 		<IsAotCompatible>true</IsAotCompatible>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-
+		<!-- Configurations -->
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<AnalysisLevel>latest-all</AnalysisLevel>
+		<AnalysisMode>Recommended</AnalysisMode>
+		<WarningLevel>4</WarningLevel>
+		<DebugType>embedded</DebugType>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
+
+	<!-- Editable properties -->
+	<PropertyGroup>
+		<Title>Serialization for EIV</Title>
+		<Authors>ExtractIntoVoid</Authors>
+		<Company>ExtractIntoVoid</Company>
+		<Description>Serialization Pack</Description>
+		<Copyright>(c) 2026 ExtractIntoVoid</Copyright>
+		<PackageProjectUrl>https://github.com/ExtractIntoVoid/EIV_Coroutines</PackageProjectUrl>
+		<Version>2.3.2</Version>
+		<FileVersion>2.3.2</FileVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\LICENSE.txt" Pack="true" PackagePath="\" />
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<Target Name="SetSourceRevisionId" BeforeTargets="InitializeSourceControlInformation">
+		<Exec Command="git describe --long --always --exclude=* --abbrev=8" ConsoleToMSBuild="True" IgnoreExitCode="False">
+			<Output PropertyName="SourceRevisionId" TaskParameter="ConsoleOutput" />
+		</Exec>
+	</Target>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
-		<None Include="..\LICENSE.txt" Pack="true" PackagePath="\" />
-		<None Include="..\README.md" Pack="true" PackagePath="\" />
+		<PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<None Remove="stylecop.json" />
+		<AdditionalFiles Include="stylecop.json" />
 	</ItemGroup>
 </Project>

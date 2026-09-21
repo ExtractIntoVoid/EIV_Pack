@@ -11,30 +11,11 @@ public ref partial struct PackReader
     private readonly ReadOnlySequence<byte> bufferSource;
     private ReadOnlySpan<byte> currentBuffer;
     private int consumed;
-    /// <summary>
-    /// The text encoding for strings.
-    /// </summary>
-    public readonly Encoding TextEncoding;
 
     /// <summary>
-    /// The length of the data.
+    /// Initializes a new instance of the <see cref="PackReader"/> struct.
     /// </summary>
-    public readonly long Length;
-
-    /// <summary>
-    /// The length of consumed data.
-    /// </summary>
-    public readonly int Consumed => consumed;
-
-    /// <summary>
-    /// The length remaining data.
-    /// </summary>
-    public readonly long Remaining => Length - consumed;
-
-    /// <summary>
-    /// Creates a pack reader from <paramref name="sequence"/>.
-    /// </summary>
-    /// <param name="sequence"></param>
+    /// <param name="sequence">The sequnece to read.</param>
     public PackReader(in ReadOnlySequence<byte> sequence)
     {
         bufferSource = sequence;
@@ -48,9 +29,9 @@ public ref partial struct PackReader
     }
 
     /// <summary>
-    /// Creates a pack reader from the <paramref name="buffer"/>.
+    /// Initializes a new instance of the <see cref="PackReader"/> struct.
     /// </summary>
-    /// <param name="buffer"></param>
+    /// <param name="buffer">The buffer to read.</param>
     public PackReader(ReadOnlySpan<byte> buffer)
     {
         bufferSource = new ReadOnlySequence<byte>(buffer.ToArray());
@@ -60,6 +41,26 @@ public ref partial struct PackReader
     }
 
     /// <summary>
+    /// Gets the length of consumed data.
+    /// </summary>
+    public readonly int Consumed => consumed;
+
+    /// <summary>
+    /// Gets the length remaining data.
+    /// </summary>
+    public readonly long Remaining => Length - consumed;
+
+    /// <summary>
+    /// Gets the length of the data.
+    /// </summary>
+    public readonly long Length { get; }
+
+    /// <summary>
+    /// Gets the text encoding for strings.
+    /// </summary>
+    public readonly Encoding TextEncoding { get; }
+
+    /// <summary>
     /// Advance the byte with <paramref name="count"/>.
     /// </summary>
     /// <param name="count">The count to advance.</param>
@@ -67,7 +68,9 @@ public ref partial struct PackReader
     public void Advance(int count)
     {
         if (count == 0)
+        {
             return;
+        }
 
         if (Remaining < count)
         {
@@ -89,7 +92,9 @@ public ref partial struct PackReader
     public void SetConsumed(int inConsumed)
     {
         if (inConsumed > Length)
+        {
             return;
+        }
 
         consumed = inConsumed;
 

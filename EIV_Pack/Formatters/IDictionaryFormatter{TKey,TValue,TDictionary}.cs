@@ -3,9 +3,9 @@
 /// <summary>
 /// A <see cref="IDictionary{TKey, TValue}"/> formatter.
 /// </summary>
-/// <typeparam name="TKey"></typeparam>
-/// <typeparam name="TValue"></typeparam>
-/// <typeparam name="TDictionary"></typeparam>
+/// <typeparam name="TKey">Any type for key that are not null.</typeparam>
+/// <typeparam name="TValue">Any type for value.</typeparam>
+/// <typeparam name="TDictionary">Any <see cref="IDictionary{TKey, TValue}"/>.</typeparam>
 public abstract class IDictionaryFormatter<TKey, TValue, TDictionary> : BaseFormatter<TDictionary>
     where TDictionary : IDictionary<TKey, TValue?>?, new()
     where TKey : notnull
@@ -27,9 +27,13 @@ public abstract class IDictionaryFormatter<TKey, TValue, TDictionary> : BaseForm
         }
 
         if (value == null)
+        {
             value = CreateDictionary(len)!;
+        }
         else
+        {
             value.Clear();
+        }
 
         IFormatter<TKey?> keyformatter = FormatterProvider.GetFormatter<TKey?>();
         IFormatter<TValue?> valueformatter = FormatterProvider.GetFormatter<TValue?>();
@@ -57,7 +61,6 @@ public abstract class IDictionaryFormatter<TKey, TValue, TDictionary> : BaseForm
         IFormatter<TValue?> valueformatter = FormatterProvider.GetFormatter<TValue?>();
         foreach (var item in dictionary)
         {
-
 #if !NETSTANDARD2_0
             item.Deconstruct(out var key, out var value);
 #else
@@ -68,68 +71,5 @@ public abstract class IDictionaryFormatter<TKey, TValue, TDictionary> : BaseForm
             keyformatter.Serialize(ref writer, ref key);
             valueformatter.Serialize(ref writer, ref value);
         }
-    }
-}
-
-/// <summary>
-/// A <see cref="Dictionary{TKey, TValue}"/> formatter.
-/// </summary>
-public class DictionaryFormatter<TKey, TValue>(IEqualityComparer<TKey>? comparer) : IDictionaryFormatter<TKey, TValue, Dictionary<TKey, TValue?>> where TKey : notnull
-{
-    readonly IEqualityComparer<TKey>? comparer = comparer;
-
-    /// <inheritdoc />
-    public DictionaryFormatter()
-        : this(null)
-    {
-
-    }
-
-    /// <inheritdoc />
-    public override Dictionary<TKey, TValue?> CreateDictionary(int length)
-    {
-        return new(length, comparer);
-    }
-}
-
-/// <summary>
-/// A <see cref="SortedDictionary{TKey, TValue}"/> formatter.
-/// </summary>
-public class SortedDictionaryFormatter<TKey, TValue>(IComparer<TKey>? comparer) : IDictionaryFormatter<TKey, TValue, SortedDictionary<TKey, TValue?>> where TKey : notnull
-{
-    readonly IComparer<TKey>? comparer = comparer;
-
-    /// <inheritdoc />
-    public SortedDictionaryFormatter()
-        : this(null)
-    {
-
-    }
-
-    /// <inheritdoc />
-    public override SortedDictionary<TKey, TValue?> CreateDictionary(int length)
-    {
-        return new(comparer);
-    }
-}
-
-/// <summary>
-/// A <see cref="SortedList{TKey, TValue}"/> formatter.
-/// </summary>
-public class SortedListFormatter<TKey, TValue>(IComparer<TKey>? comparer) : IDictionaryFormatter<TKey, TValue, SortedList<TKey, TValue?>> where TKey : notnull
-{
-    readonly IComparer<TKey>? comparer = comparer;
-
-    /// <inheritdoc />
-    public SortedListFormatter()
-        : this(null)
-    {
-
-    }
-
-    /// <inheritdoc />
-    public override SortedList<TKey, TValue?> CreateDictionary(int length)
-    {
-        return new(length, comparer);
     }
 }
