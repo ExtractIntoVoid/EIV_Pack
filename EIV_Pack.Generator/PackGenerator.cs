@@ -103,11 +103,7 @@ internal static class PackGenerator
                     if (!FormatterProvider.IsRegistered<{{TypeName}}>())
                     {
                         FormatterProvider.Register<{{TypeName}}>(new {{formatterName}}());
-                    }
-
-                    if (!FormatterProvider.IsRegistered<{{TypeName}}[]>())
-                    {
-                        FormatterProvider.Register(new ArrayFormatter<{{TypeName}}>());
+                        FormatterProvider.RegisterCollection<{{TypeName}}>();
                     }
                 }
             
