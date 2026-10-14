@@ -44,6 +44,22 @@ public partial class MyCor
 
 }
 
+public abstract partial class AlreadyExistingFormatter
+{
+    public int Test { get; set; }
+
+    public static void RegisterFormatter()
+    {
+
+    }
+}
+
+[EIV_Packable]
+public partial class AddNewOnFormatter : AlreadyExistingFormatter
+{
+    public int Test2 { get; set; }
+}
+
 #if NET8_0_OR_GREATER
 
 public interface IInitTest

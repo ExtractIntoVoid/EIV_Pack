@@ -127,6 +127,11 @@ internal static class PreProcessing
     {
         bool ret = false;
 
+        if (typeSymbol.GetMembers().OfType<IMethodSymbol>().Any(x => x.Name == "RegisterFormatter" && x.IsStatic))
+        {
+            return true;
+        }
+
         if (typeSymbol.BaseType != null)
         {
             ret |= typeSymbol.BaseType.GetAttributes().Any(att => att.AttributeClass?.Name == "EIV_PackableAttribute");
